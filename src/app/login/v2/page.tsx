@@ -6,8 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import Link from "next/link";
-import HeaderNav from "@/components/HeaderNav";
-import { ChevronLeft } from "lucide-react";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useRouter } from "next/navigation";

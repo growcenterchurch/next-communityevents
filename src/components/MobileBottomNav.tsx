@@ -17,6 +17,7 @@ const MobileBottomNav = () => {
     "/dashboard",
     "/forget",
     "/profile",
+    "/joincool",
   ];
   const shouldShowNav = !excludedRoutes.includes(pathname);
 

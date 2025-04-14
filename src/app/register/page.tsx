@@ -6,7 +6,7 @@ import { Eye, EyeOff, ChevronLeft, Loader2 } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+
 import { API_BASE_URL, API_KEY } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
@@ -21,14 +21,13 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { Button as CommandButton } from "@/components/ui/button";
+
 import {
   Command,
   CommandList,
