@@ -284,7 +284,7 @@ const JoinCoolForm = () => {
             <Input
               type="text"
               id="floating_outlined"
-              className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-white rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-white rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=""
               autoFocus={false}
               value={fullName}
@@ -292,7 +292,7 @@ const JoinCoolForm = () => {
             />
             <Label
               htmlFor="floating_outlined"
-              className="absolute text-sm sm:text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
+              className="absolute text-sm sm:text-sm text-gray-500 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]   px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
             >
               Full Name
             </Label>
@@ -350,7 +350,7 @@ const JoinCoolForm = () => {
                 yearOfBirth && (yearOfBirth < 1920 || yearOfBirth > 2025)
                   ? "border-red-500 text-red-500"
                   : "border-gray-300 text-gray-900"
-              } appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
+              } appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
               placeholder=""
               autoFocus={false}
               value={yearOfBirth ?? ""}
@@ -375,7 +375,7 @@ const JoinCoolForm = () => {
             />
             <Label
               htmlFor="floating_outlined_dob"
-              className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
+              className="absolute text-sm text-gray-500  duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]   px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
             >
               <span>Year of Birth</span>
               {yearOfBirth && (yearOfBirth < 1920 || yearOfBirth > 2025) && (
@@ -394,7 +394,7 @@ const JoinCoolForm = () => {
                 phoneNumber && !isValidIndonesianPhone(phoneNumber)
                   ? "border-red-500 text-red-500"
                   : "border-gray-300 text-gray-900"
-              } appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
+              } appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
               placeholder=""
               autoFocus={false}
               minLength={9}
@@ -413,9 +413,19 @@ const JoinCoolForm = () => {
             />
             <Label
               htmlFor="floating_outlined_phone"
-              className="absolute text-xs sm:text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
+              className={`absolute text-xs sm:text-sm  duration-300 transform -translate-y-[10px] sm:-translate-y-3 scale-75 top-2 z-10 origin-[0]  px-2 peer-focus:px-2 peer-focus:text-primary-light peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent`}
             >
-              <span>WhatsApp Number (ex: 081310109833)</span>
+              <span
+                className={`${
+                  phoneNumber && !isValidIndonesianPhone(phoneNumber)
+                    ? "text-red-500"
+                    : "text-gray-500"
+                }`}
+              >
+                {phoneNumber && !isValidIndonesianPhone(phoneNumber)
+                  ? "Invalid Phone Number!"
+                  : "WhatsApp Number (ex: 081310109833)"}
+              </span>
             </Label>
           </div>
           <div className="">
@@ -467,7 +477,7 @@ const JoinCoolForm = () => {
             <Input
               type="string"
               id="floating_outlined_address"
-              className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-white rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-white rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=""
               autoFocus={false}
               value={residence ?? ""}
@@ -482,7 +492,8 @@ const JoinCoolForm = () => {
             />
             <Label
               htmlFor="floating_outlined_address"
-              className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
+              className="absolute text-sm text-gray-500 
+               duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
             >
               Residence Address
             </Label>
