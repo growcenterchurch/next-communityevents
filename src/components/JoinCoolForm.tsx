@@ -166,25 +166,27 @@ const JoinCoolForm = () => {
   }, [areaCode]);
 
   return (
-    <div className="container mx-auto px-4 py-2 sm:p-4 max-w-xl">
-      <div className="bg-gray-100 rounded-xl p-4 sm:p-6">
+    <div className="w-full px-2 sm:px-4 py-4 sm:py-6 max-w-xl sm:mx-auto">
+      <div className="bg-gray-100 rounded-xl p-3 sm:p-6">
         <div>
           <div className="relative bg-gray-100 flex flex-row justify-start md:justify-between">
             <div className="flex flex-col">
-              <div className="text-4xl sm:text-5xl font-light tracking-tighter text-primary">
+              <div className="ml-2 text-3xl sm:text-5xl font-light tracking-tighter text-primary">
                 <div className="">It's Hot</div>
                 <div className="">Outside,</div>
                 <div className="">Go COOL!</div>
               </div>
-              <div className="my-2 sm:my-4 ml-2 text-lg sm:text-xl tracking-tight font-light text-primary flex flex-col">
-                <span>Let's grow together! Join the Grow Community.</span>
-                <span className="text-sm">
+              <div className="my-2 sm:my-4 ml-2 text-base sm:text-xl tracking-tight font-light text-primary flex flex-col">
+                <span className="break-words">
+                  Let's grow together! Join the Grow Community.
+                </span>
+                <span className="mt-2 text-xs sm:text-sm break-words">
                   If you need help, just give us a shout on WhatsApp at{" "}
                   <a
                     href="https://wa.me/+6287795558889"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-green-700 hover:text-black/50 underline underline-offset-2"
+                    className="text-green-700 hover:text-black/50 underline underline-offset-2 inline-block"
                   >
                     +6287795558889
                   </a>
@@ -193,11 +195,11 @@ const JoinCoolForm = () => {
             </div>
 
             <Image
-              className="bg-gray-100 object-contain"
+              className="bg-gray-100 object-contain max-h-[100px] sm:max-h-[120px]"
               src="/images/gc-logo-2.png"
               alt="Logo"
-              width={50}
-              height={50}
+              width={60}
+              height={60}
               priority
               style={{
                 width: "auto",
@@ -221,13 +223,13 @@ const JoinCoolForm = () => {
             />
             <Label
               htmlFor="floating_outlined"
-              className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
+              className="absolute text-sm sm:text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
             >
               Full Name
             </Label>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-0">
-            <div className="w-full sm:w-1/2">
+          <div className="flex flex-row">
+            <div className="w-1/2">
               <Select
                 value={gender ?? undefined}
                 onValueChange={(value: Gender) => setGender(value)}
@@ -246,7 +248,7 @@ const JoinCoolForm = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div className="w-full sm:w-1/2">
+            <div className="w-1/2">
               <Select
                 value={maritalStatus ?? undefined}
                 onValueChange={(value: MaritalStatus) =>
@@ -326,7 +328,7 @@ const JoinCoolForm = () => {
             />
             <Label
               htmlFor="floating_outlined_phone"
-              className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
+              className="absolute text-xs sm:text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
             >
               WhatsApp Number (ex: 081310109833)
             </Label>
