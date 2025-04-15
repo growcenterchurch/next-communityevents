@@ -13,6 +13,8 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import Image from "next/image";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
+import { useToast } from "./ui/use-toast";
+import { useRouter } from "next/navigation";
 
 type Gender = "male" | "female";
 type MaritalStatus = "single" | "married" | "others";
@@ -45,6 +47,8 @@ interface FormData {
 }
 
 const JoinCoolForm = () => {
+  const { toast } = useToast();
+  const router = useRouter();
   const [fullName, setFullName] = React.useState<string>("");
   const [gender, setGender] = React.useState<Gender | null>(null);
   const [maritalStatus, setMaritalStatus] =
@@ -64,8 +68,15 @@ const JoinCoolForm = () => {
     React.useState<SelectedLocation | null>(null);
   const [accessToken, setAccessToken] = React.useState<string | null>(null);
 
-  // Add this ref before the useEffect
   const tokenFetchedRef = React.useRef(false);
+
+  const isValidIndonesianPhone = (phone: string) => {
+    // Matches Indonesian phone numbers:
+    // - Starts with 08 or +628 or 628
+    // - Followed by 8-12 digits
+    const phoneRegex = /^(?:08|[+]628|628)[0-9]{8,12}$/;
+    return phoneRegex.test(phone);
+  };
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -102,6 +113,47 @@ const JoinCoolForm = () => {
       return;
     }
 
+    // Validate all required fields
+    if (
+      !fullName ||
+      !gender ||
+      !maritalStatus ||
+      !yearOfBirth ||
+      !phoneNumber ||
+      !residence ||
+      !communityOfInterest ||
+      !areaCode ||
+      !selectedLocation
+    ) {
+      toast({
+        title: "Join Failed!",
+        description: `Please fill all fields!`,
+        className: "bg-red-400",
+        duration: 3000,
+      });
+      return;
+    }
+
+    if (phoneNumber && !isValidIndonesianPhone(phoneNumber)) {
+      toast({
+        title: "Join Failed!",
+        description: `Please fill a valid phone number!`,
+        className: "bg-red-400",
+        duration: 3000,
+      });
+      return;
+    }
+
+    if (yearOfBirth && (yearOfBirth < 1920 || yearOfBirth > 2025)) {
+      toast({
+        title: "Join Failed!",
+        description: `Please fill a valid birth year!`,
+        className: "bg-red-400",
+        duration: 3000,
+      });
+      return;
+    }
+
     const formData: FormData = {
       name: fullName,
       gender,
@@ -127,12 +179,29 @@ const JoinCoolForm = () => {
 
       const result = await response.json();
       if (response.ok) {
-        console.log("Form submitted successfully:", result);
+        toast({
+          title: "Register Complete!",
+          description: `Congrats, You have successfully joined!`,
+          className: "bg-green-400",
+          duration: 3000,
+        });
+        // Redirect to success page after successful form submission
+        router.push("/joincool/success");
       } else {
-        console.error("Form submission failed:", result);
+        toast({
+          title: "Register Failed!",
+          description: `Error: ${result.message}`,
+          className: "bg-red-400",
+          duration: 3000,
+        });
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      toast({
+        title: "Register Failed!",
+        description: `Error: ${error}`,
+        className: "bg-red-400",
+        duration: 3000,
+      });
     }
   };
 
@@ -166,7 +235,7 @@ const JoinCoolForm = () => {
   }, [areaCode]);
 
   return (
-    <div className="w-full px-2 sm:px-4 py-4 sm:py-6 max-w-xl sm:mx-auto">
+    <div className="w-full px-2 sm:px-4 py-4 sm:py-6 max-w-3xl sm:mx-auto">
       <div className="bg-gray-100 rounded-xl p-3 sm:p-6">
         <div>
           <div className="relative bg-gray-100 flex flex-row justify-start md:justify-between">
@@ -277,11 +346,15 @@ const JoinCoolForm = () => {
             <Input
               type="number"
               id="floating_outlined_dob"
-              className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-white rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className={`block px-2.5 pb-2.5 pt-4 w-full text-base bg-white rounded-lg border-1 ${
+                yearOfBirth && (yearOfBirth < 1920 || yearOfBirth > 2025)
+                  ? "border-red-500 text-red-500"
+                  : "border-gray-300 text-gray-900"
+              } appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
               placeholder=""
               autoFocus={false}
               value={yearOfBirth ?? ""}
-              min="1900"
+              min="1920"
               max="2025"
               onKeyDown={(e) => {
                 if (["e", "E", "+", "-"].includes(e.key)) {
@@ -304,14 +377,24 @@ const JoinCoolForm = () => {
               htmlFor="floating_outlined_dob"
               className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
             >
-              Year of Birth (ex: 1997)
+              <span>Year of Birth</span>
+              {yearOfBirth && (yearOfBirth < 1920 || yearOfBirth > 2025) && (
+                <span className="text-red-500 text-xs">
+                  {" "}
+                  - Invalid birth year!
+                </span>
+              )}
             </Label>
           </div>
           <div className="relative">
             <Input
               type="string"
               id="floating_outlined_phone"
-              className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-white rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className={`block px-2.5 pb-2.5 pt-4 w-full text-base  bg-white rounded-lg border-1 ${
+                phoneNumber && !isValidIndonesianPhone(phoneNumber)
+                  ? "border-red-500 text-red-500"
+                  : "border-gray-300 text-gray-900"
+              } appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
               placeholder=""
               autoFocus={false}
               minLength={9}
@@ -322,7 +405,9 @@ const JoinCoolForm = () => {
                 if (value === "") {
                   setPhoneNumber(null);
                 } else {
-                  setPhoneNumber(value);
+                  // Only allow numbers
+                  const numericValue = value.replace(/[^\d]/g, "");
+                  setPhoneNumber(numericValue);
                 }
               }}
             />
@@ -330,7 +415,13 @@ const JoinCoolForm = () => {
               htmlFor="floating_outlined_phone"
               className="absolute text-xs sm:text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
             >
-              WhatsApp Number (ex: 081310109833)
+              <span>WhatsApp Number (ex: 081310109833)</span>
+              {phoneNumber && !isValidIndonesianPhone(phoneNumber) && (
+                <span className="text-red-500 text-xs">
+                  {" "}
+                  - Invalid phone number
+                </span>
+              )}
             </Label>
           </div>
           <div className="">
@@ -429,7 +520,18 @@ const JoinCoolForm = () => {
         <Button
           className="my-6 w-full"
           onClick={handleSubmit}
-          disabled={!accessToken}
+          disabled={
+            !accessToken ||
+            !fullName ||
+            !gender ||
+            !maritalStatus ||
+            !yearOfBirth ||
+            !phoneNumber ||
+            !residence ||
+            !communityOfInterest ||
+            !areaCode ||
+            !selectedLocation
+          }
         >
           Submit
         </Button>
