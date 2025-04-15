@@ -416,12 +416,6 @@ const JoinCoolForm = () => {
               className="absolute text-xs sm:text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-3 scale-75 top-2 z-10 origin-[0]  dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary-light  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 peer-focus:background-transparent"
             >
               <span>WhatsApp Number (ex: 081310109833)</span>
-              {phoneNumber && !isValidIndonesianPhone(phoneNumber) && (
-                <span className="text-red-500 text-xs">
-                  {" "}
-                  - Invalid phone number
-                </span>
-              )}
             </Label>
           </div>
           <div className="">

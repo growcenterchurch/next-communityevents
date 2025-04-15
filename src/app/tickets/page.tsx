@@ -295,16 +295,15 @@ const TicketsPage = () => {
                       Click / tap the QR Code image above to expand it.
                     </span>
                     <Separator></Separator>
-                    <CardContent className="flex flex-col justify-center items-center">
-                      <p className="text-sm text-gray-700">
-                        <b>Session:</b> {registration.sessionName} (
-                        {registration.sessionCode})
+                    <CardContent className="flex flex-col justify-center items-center w-full">
+                      <p className="text-sm text-gray-700 w-full">
+                        <b>Session:</b> {registration.sessionName} ({registration.sessionCode})
                       </p>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-gray-700 w-full break-words overflow-auto max-h-32 mt-2">
                         <b>Description:</b>{" "}
-                        {convertLinksToAnchors(
-                          registration.sessionDescription || ""
-                        )}
+                        <span className="inline-block">
+                          {convertLinksToAnchors(registration.sessionDescription || "")}
+                        </span>
                       </p>
                     </CardContent>
                     <CardFooter>
