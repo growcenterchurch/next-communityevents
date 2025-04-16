@@ -9,16 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -37,6 +27,7 @@ type CommunityOfInterest =
   | "college"
   | "umum"
   | "professional"
+  | "newlywed"
   | "umum";
 interface LocationData {
   type: string;
@@ -116,6 +107,23 @@ const JoinCoolForm = () => {
 
     fetchToken();
   }, []);
+
+  const getLabelFromValue = (value: CommunityOfInterest | null | undefined) => {
+    switch (value) {
+      case "youth":
+        return "Youth";
+      case "college":
+        return "College";
+      case "professional":
+        return "Professional";
+      case "newlywed":
+        return "Newlywed";
+      case "umum":
+        return "Umum";
+      default:
+        return "";
+    }
+  };
 
   // Update handleSubmit to use the token
   const handleSubmit = async () => {
@@ -521,13 +529,55 @@ const JoinCoolForm = () => {
               }}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Community of Interest" />
+                <SelectValue
+                  placeholder="Community of Interest"
+                  children={getLabelFromValue(communityOfInterest)}
+                />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="youth">Youth</SelectItem>
-                <SelectItem value="college">College</SelectItem>
-                <SelectItem value="umum">Umum</SelectItem>
-                <SelectItem value="professional">Professional</SelectItem>
+                <SelectItem value="youth">
+                  <div className="flex flex-col">
+                    <span>Youth</span>
+                    <span className="text-xs text-muted-foreground">
+                      Untuk anak SMP-SMA (13-18 tahun)
+                    </span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="college">
+                  <div className="flex flex-col">
+                    <span>College</span>
+                    <span className="text-xs text-muted-foreground">
+                      Untuk anak kuliah dan fresh graduate (18-25 tahun)
+                    </span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="professional">
+                  <div className="flex flex-col">
+                    <span>Professional</span>
+                    <span className="text-xs text-muted-foreground">
+                      Untuk kelompok usia pekerja dan dewasa muda
+                    </span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="newlywed">
+                  <div className="flex flex-col">
+                    <span>Newlywed</span>
+                    <span className="text-xs text-muted-foreground">
+                      Untuk pasangan yang baru menikah atau yang
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      ingin bertumbuh bersama pasangan lainnya
+                    </span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="umum">
+                  <div className="flex flex-col">
+                    <span>Umum</span>
+                    <span className="text-xs text-muted-foreground">
+                      Untuk general, lintas generasi dan status
+                    </span>
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
