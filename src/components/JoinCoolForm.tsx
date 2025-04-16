@@ -529,10 +529,9 @@ const JoinCoolForm = () => {
               }}
             >
               <SelectTrigger>
-                <SelectValue
-                  placeholder="Community of Interest"
-                  children={getLabelFromValue(communityOfInterest)}
-                />
+                <SelectValue placeholder="Community of Interest">
+                  {getLabelFromValue(communityOfInterest)}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="youth">
