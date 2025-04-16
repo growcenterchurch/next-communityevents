@@ -8,6 +8,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -252,12 +263,12 @@ const JoinCoolForm = () => {
                 <span className="mt-2 text-xs sm:text-sm break-words">
                   If you need help, just give us a shout on WhatsApp at{" "}
                   <a
-                    href="https://wa.me/+6287795558889"
+                    href="https://wa.me/+6281398812927"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-green-700 hover:text-black/50 underline underline-offset-2 inline-block"
                   >
-                    +6287795558889
+                    +62-813-9881-2927
                   </a>
                 </span>
               </div>
@@ -285,7 +296,7 @@ const JoinCoolForm = () => {
               type="text"
               id="floating_outlined"
               className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-white rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=""
+              placeholder=" "
               autoFocus={false}
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
@@ -335,7 +346,6 @@ const JoinCoolForm = () => {
                 <SelectContent>
                   <SelectItem value="single">Single</SelectItem>
                   <SelectItem value="married">Married</SelectItem>
-                  <SelectItem value="divorced">Divorced</SelectItem>
                   <SelectItem value="widowed">Widowed</SelectItem>
                   <SelectItem value="others">Others</SelectItem>
                 </SelectContent>
@@ -351,7 +361,7 @@ const JoinCoolForm = () => {
                   ? "border-red-500 text-red-500"
                   : "border-gray-300 text-gray-900"
               } appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
-              placeholder=""
+              placeholder=" "
               autoFocus={false}
               value={yearOfBirth ?? ""}
               min="1920"
@@ -395,7 +405,7 @@ const JoinCoolForm = () => {
                   ? "border-red-500 text-red-500"
                   : "border-gray-300"
               } appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
-              placeholder=""
+              placeholder=" "
               autoFocus={false}
               minLength={9}
               maxLength={16}

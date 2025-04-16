@@ -44,9 +44,23 @@ const SuccessJoinCoolPage = () => {
               />
             </svg>
           </div>
-          <p className="text-center text-gray-700 mb-6">
-            Congratulations! You have successfully joined the Grow Community.
-            We're excited to have you with us! Thank you and God bless you.
+          <p className="text-justify text-gray-700 mb-2">
+            Your registration has been successfully completed. We will forward
+            your information to the appropriate COOL group.
+          </p>
+          <p className="text-justify text-gray-700 mb-2">
+            <span className="font-semibold text-primary">
+              Kindly wait for our team to process the data (up to 1-2 weeks) to
+              contact you.
+            </span>
+          </p>
+          <p className="text-justify text-gray-700 mb-4">
+            We are truly delighted to welcome you into the{" "}
+            <span className="font-semibold">COOL</span> community. Wishing you a
+            wonderful experience ahead.
+          </p>
+          <p className="text-lg font-bold text-primary mt-2">
+            ITS HOT OUTSIDE - GO COOL!
           </p>
           {/* <div className="flex flex-col w-full gap-3">
             <Button className="w-full" onClick={() => router.push("/home")}>
