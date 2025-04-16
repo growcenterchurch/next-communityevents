@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { LoadingSpinner } from "./ui/loading-spinner";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -50,6 +50,8 @@ interface FormData {
 
 const JoinCoolForm = () => {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLocationLoading, setIsLocationLoading] = React.useState(false);
   const router = useRouter();
   const [fullName, setFullName] = React.useState<string>("");
   const [gender, setGender] = React.useState<Gender | null>(null);
@@ -131,6 +133,7 @@ const JoinCoolForm = () => {
       console.error("No access token available");
       return;
     }
+    setIsLoading(true);
 
     // Validate all required fields
     if (
@@ -221,13 +224,15 @@ const JoinCoolForm = () => {
         className: "bg-red-400",
         duration: 3000,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     const fetchLocations = async () => {
       if (!areaCode) return;
-
+      setIsLocationLoading(true);
       try {
         const response = await fetch(
           `${API_BASE_URL}/api/v2/campuses/${areaCode}/locations`,
@@ -247,6 +252,8 @@ const JoinCoolForm = () => {
         }
       } catch (error) {
         console.error("Error fetching locations:", error);
+      } finally {
+        setIsLocationLoading(false);
       }
     };
 
@@ -478,7 +485,13 @@ const JoinCoolForm = () => {
               }}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select Location" />
+                {isLocationLoading ? (
+                  <div className="flex items-center gap-2">
+                    <LoadingSpinner className="w-3" /> Fetching locations...
+                  </div>
+                ) : (
+                  <SelectValue placeholder="Select Location" />
+                )}
               </SelectTrigger>
               <SelectContent>
                 {[...locations]
@@ -585,6 +598,7 @@ const JoinCoolForm = () => {
           className="my-6 w-full"
           onClick={handleSubmit}
           disabled={
+            isLoading ||
             !accessToken ||
             !fullName ||
             !gender ||
@@ -597,7 +611,13 @@ const JoinCoolForm = () => {
             !selectedLocation
           }
         >
-          Submit
+          {isLoading ? (
+            <div className="flex items-center gap-2">
+              <LoadingSpinner className="w-4 h-4" /> Loading...
+            </div>
+          ) : (
+            "Submit"
+          )}
         </Button>
         <div>
           <div className="flex flex-col gap-2 text-xs sm:text-sm">
