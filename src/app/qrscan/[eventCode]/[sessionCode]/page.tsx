@@ -45,55 +45,55 @@ const QRScan: React.FC = () => {
       return;
     }
 
+    // try {
+    //   const patchResponse = await fetch(
+    //     `${API_BASE_URL}/api/v2/events/registers/${qrCode}/status`,
+    //     {
+    //       method: "PATCH",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${accessToken}`,
+    //         "X-API-Key": API_KEY || "",
+    //       },
+    //       body: JSON.stringify({
+    //         status: "success",
+    //         updatedAt: new Date().toISOString(),
+    //       }),
+    //     }
+    //   );
+
     try {
-      const patchResponse = await fetch(
-        `${API_BASE_URL}/api/v2/events/registers/${qrCode}/status`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-            "X-API-Key": API_KEY || "",
-          },
-          body: JSON.stringify({
-            status: "success",
-            updatedAt: new Date().toISOString(),
-          }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/v2/events/registers`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+          "X-API-Key": API_KEY || "",
+        },
+        body: JSON.stringify({
+          communityId: qrCode,
+          eventCode: eventCode,
+          instanceCode: sessionCode,
+          isPersonalQR: true,
+          name: userData.name,
+          registerAt: new Date().toISOString(),
+          description: "Offline Registration",
+          // registrants: [
+          //   {
+          //     name: userData.name,
+          //   },
+          // ],
+        }),
+      });
 
-      // try {
-      //   const response = await fetch(`${API_BASE_URL}/api/v2/events/registers`, {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: `Bearer ${accessToken}`,
-      //       "X-API-Key": API_KEY || "",
-      //     },
-      //     body: JSON.stringify({
-      //       communityId: qrCode,
-      //       eventCode: eventCode,
-      //       instanceCode: sessionCode,
-      //       isPersonalQR: true,
-      //       name: userData.name,
-      //       registerAt: new Date().toISOString(),
-      //       description: "Offline Registration",
-      //       // registrants: [
-      //       //   {
-      //       //     name: userData.name,
-      //       //   },
-      //       // ],
-      //     }),
-      //   });
-
-      if (!patchResponse.ok) {
+      if (!response.ok) {
         // Manually throw an error to handle it in the catch block
-        const errorResult = await patchResponse.json(); // Try to get the error details from the response body
+        const errorResult = await response.json(); // Try to get the error details from the response body
         const errorMessage = errorResult?.message || "Unknown error occurred";
         throw new Error(errorMessage); // Throw the error so it can be caught by the catch block
       }
 
-      const data = await patchResponse.json();
+      const data = await response.json();
       setMessage("Registration successful!");
       setRegisteredResponse(data);
       console.log(data);
