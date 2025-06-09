@@ -12,7 +12,7 @@ export default function Home() {
     router.push("/login/v2");
   }, [router]);
   return (
-    <>Easter Egg</>
+    <></>
     // <main className="flex h-screen flex-col justify-start md:justify-between items-center bg-white">
     //   {/* Logo Section */}
     //   <div className="my-14 md:mt-28">

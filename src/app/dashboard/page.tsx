@@ -252,7 +252,8 @@ function EventsAdmin() {
     <>
       <div className="flex min-h-screen w-full flex-col gap-y-4">
         <HeaderNav name="Admin Dashboard" link="home"></HeaderNav>
-        <div className="relative w-full max-w-lg mx-auto">
+        <div className="container mx-auto p-4">
+          <h1 className="text-2xl font-bold mb-4">Users List</h1>
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <div className="flex w-full max-w-sm items-center space-x-2">
             {" "}
@@ -277,13 +278,23 @@ function EventsAdmin() {
             >
               Search
             </Button>
+            <Button
+              variant={"destructive"}
+              type="reset"
+              onClick={() => {
+                setSearchQuery(null);
+                setUsers([]); // Clear users when search query is empty
+              }}
+            >
+              Clear
+            </Button>
           </div>
         </div>
 
         <div className="container mx-auto p-4">
           {users && users.length > 0 && (
             <>
-              <h1 className="text-2xl font-bold mb-4">Search Results</h1>
+              <h1 className="text-2xl font-bold mb-2">Search Results</h1>
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -315,7 +326,7 @@ function EventsAdmin() {
             </>
           )}
 
-          <h1 className="text-2xl font-bold mb-4">Events List</h1>
+          <h1 className="text-2xl font-bold mt-8 mb-4">Events List</h1>
           {isLoading ? (
             <p>Loading...</p>
           ) : (
@@ -363,6 +374,14 @@ function EventsAdmin() {
               </TableBody>
             </Table>
           )}
+        </div>
+        <div className="container mx-auto p-4 ">
+          <Link
+            href={"dashboard/new-joiners"}
+            className="text-xl w-[20%] mb-2 hover:underline hover:text-blue-800 border p-4 rounded-xl hover:bg-blue-300  flex items-center justify-start"
+          >
+            View COOL New Joiners
+          </Link>
         </div>
       </div>
     </>
