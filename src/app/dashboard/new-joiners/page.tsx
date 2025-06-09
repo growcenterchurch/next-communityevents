@@ -51,7 +51,7 @@ export default function DemoPage() {
   return (
     <>
       <HeaderNav name="New Joiners" link="dashboard" />
-      <div className="px-6 mx-auto max-h-full py-10">
+      <div className="px-6 mx-auto max-h-full py-10 mb-16">
         <h1 className="text-2xl font-bold mb-8 text-center">New Joiners</h1>
         <DataTable columns={getColumns(handleStatusChange)} data={data} />
       </div>
