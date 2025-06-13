@@ -31,6 +31,12 @@ export default function DemoPage() {
         },
         cache: "no-store",
       });
+      if (res.status === 401) {
+        // Handle expired token
+        handleExpiredToken();
+        return;
+      }
+
       if (!res.ok) {
         setData([]);
         return;

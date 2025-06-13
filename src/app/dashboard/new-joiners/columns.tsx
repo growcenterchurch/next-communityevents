@@ -133,7 +133,7 @@ export const getColumns = (
           return;
         }
         try {
-          await fetch(
+          const res = await fetch(
             `${API_BASE_URL}/api/v2/internal/cools/join/${id}/${newStatus}`,
             {
               method: "PATCH",
@@ -144,7 +144,12 @@ export const getColumns = (
               },
             }
           );
-          // Optionally: revalidate or refetch here if needed
+
+          if (res.status === 401) {
+            // Handle expired token
+            handleExpiredToken();
+            return;
+          }
         } catch (err) {
           // Optionally: revert optimistic update or show error
         }
