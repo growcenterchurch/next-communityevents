@@ -18,19 +18,23 @@ export default function DemoPage() {
 
   useEffect(() => {
     async function fetchData() {
+      const dataLimit = 100;
       const accessToken = await getValidAccessToken();
       if (!accessToken) {
         handleExpiredToken();
         return;
       }
-      const res = await fetch(`${API_BASE_URL}/api/v2/internal/cools/join`, {
-        headers: {
-          "X-API-KEY": API_KEY || "",
-          "Content-Type": "application/json",
-          Authorization: accessToken ? `Bearer ${accessToken}` : "",
-        },
-        cache: "no-store",
-      });
+      const res = await fetch(
+        `${API_BASE_URL}/api/v2/internal/cools/join?limit=${dataLimit}`,
+        {
+          headers: {
+            "X-API-KEY": API_KEY || "",
+            "Content-Type": "application/json",
+            Authorization: accessToken ? `Bearer ${accessToken}` : "",
+          },
+          cache: "no-store",
+        }
+      );
       if (res.status === 401) {
         // Handle expired token
         handleExpiredToken();
