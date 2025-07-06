@@ -31,6 +31,7 @@ export type CoolNewJoiner = {
   campusCode: string;
   campusName: string;
   location: string;
+  createdAt: string | null;
   updatedBy: string;
   status: "pending" | "followed" | "completed";
 };
@@ -113,6 +114,30 @@ export const getColumns = (
   {
     accessorKey: "location",
     header: "Location",
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Join Date",
+    cell: ({ row }) => {
+      const date = row.original.createdAt;
+      if (!date) return "-";
+      const d = new Date(date);
+      const tanggal = d.toLocaleDateString("id-ID", {
+        timeZone: "Asia/Jakarta",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      const jam = d
+        .toLocaleTimeString("id-ID", {
+          timeZone: "Asia/Jakarta",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+        .replace(".", ":");
+      return `${tanggal} ${jam}`;
+    },
   },
   {
     accessorKey: "status",
