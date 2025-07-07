@@ -254,7 +254,6 @@ function EventsAdmin() {
         <HeaderNav name="Admin Dashboard" link="home"></HeaderNav>
         <div className="container mx-auto p-4">
           <h1 className="text-2xl font-bold mb-4">Users List</h1>
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <div className="flex w-full max-w-sm items-center space-x-2">
             {" "}
             <Input
