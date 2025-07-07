@@ -39,19 +39,39 @@ export const getColumns = (
   onStatusChange?: (id: number, status: CoolNewJoiner["status"]) => void
 ): ColumnDef<CoolNewJoiner>[] => [
   {
-    accessorKey: "id",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className=""
-      >
-        ID
-        <ArrowUpDown className=" h-1 w-1" />
-      </Button>
-    ),
-    cell: ({ row }) => row.original.id,
+    accessorKey: "createdAt",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Request Date
+          <ArrowUpDown className=" h-2 w-2" />
+        </Button>
+      );
+    },
     enableSorting: true,
+    cell: ({ row }) => {
+      const date = row.original.createdAt;
+      if (!date) return "-";
+      const d = new Date(date);
+      const tanggal = d.toLocaleDateString("id-ID", {
+        timeZone: "Asia/Jakarta",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      const jam = d
+        .toLocaleTimeString("id-ID", {
+          timeZone: "Asia/Jakarta",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+        .replace(".", ":");
+      return `${tanggal} ${jam}`;
+    },
   },
   {
     accessorKey: "name",
@@ -115,41 +135,7 @@ export const getColumns = (
     accessorKey: "location",
     header: "Location",
   },
-  {
-    accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Join Date
-          <ArrowUpDown className=" h-2 w-2" />
-        </Button>
-      );
-    },
-    enableSorting: true,
-    cell: ({ row }) => {
-      const date = row.original.createdAt;
-      if (!date) return "-";
-      const d = new Date(date);
-      const tanggal = d.toLocaleDateString("id-ID", {
-        timeZone: "Asia/Jakarta",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-      const jam = d
-        .toLocaleTimeString("id-ID", {
-          timeZone: "Asia/Jakarta",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })
-        .replace(".", ":");
-      return `${tanggal} ${jam}`;
-    },
-  },
+
   // {
   //   accessorKey: "updatedAt",
   //   header: ({ column }) => {
