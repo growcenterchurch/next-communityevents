@@ -117,7 +117,18 @@ export const getColumns = (
   },
   {
     accessorKey: "createdAt",
-    header: "Join Date",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Join Date
+          <ArrowUpDown className=" h-2 w-2" />
+        </Button>
+      );
+    },
+    enableSorting: true,
     cell: ({ row }) => {
       const date = row.original.createdAt;
       if (!date) return "-";
@@ -139,6 +150,41 @@ export const getColumns = (
       return `${tanggal} ${jam}`;
     },
   },
+  // {
+  //   accessorKey: "updatedAt",
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //       >
+  //         Last Update Time
+  //         <ArrowUpDown className=" h-2 w-2" />
+  //       </Button>
+  //     );
+  //   },
+  //   enableSorting: true,
+  //   cell: ({ row }) => {
+  //     const date = row.original.createdAt;
+  //     if (!date) return "-";
+  //     const d = new Date(date);
+  //     const tanggal = d.toLocaleDateString("id-ID", {
+  //       timeZone: "Asia/Jakarta",
+  //       year: "numeric",
+  //       month: "long",
+  //       day: "numeric",
+  //     });
+  //     const jam = d
+  //       .toLocaleTimeString("id-ID", {
+  //         timeZone: "Asia/Jakarta",
+  //         hour: "2-digit",
+  //         minute: "2-digit",
+  //         hour12: false,
+  //       })
+  //       .replace(".", ":");
+  //     return `${tanggal} ${jam}`;
+  //   },
+  // },
   {
     accessorKey: "status",
     header: "Status",
