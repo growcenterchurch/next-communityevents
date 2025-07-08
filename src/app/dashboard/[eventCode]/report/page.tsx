@@ -102,6 +102,7 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
   >(null);
   const { getValidAccessToken, handleExpiredToken } = useAuth();
   const { toast } = useToast();
+  const router = useRouter();
 
   const fetchRegistrants = async (
     cursor: string | null = null,
@@ -110,7 +111,7 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
   ) => {
     const accessToken = await getValidAccessToken();
     if (!accessToken) {
-      handleExpiredToken();
+      router.push("/login/v2");
       return;
     }
 
@@ -154,7 +155,7 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
     const fetchEventDetails = async () => {
       const accessToken = await getValidAccessToken();
       if (!accessToken) {
-        handleExpiredToken();
+        router.push("/login/v2");
         return;
       }
 
@@ -190,7 +191,7 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
   const updateRegistrantStatus = async (id: string) => {
     const accessToken = await getValidAccessToken();
     if (!accessToken) {
-      handleExpiredToken();
+      router.push("/login/v2");
       return;
     }
 

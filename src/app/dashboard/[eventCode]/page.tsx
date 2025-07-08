@@ -89,7 +89,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
   const fetchEventDetails = async () => {
     const accessToken = await getValidAccessToken();
     if (!accessToken) {
-      handleExpiredToken();
+      router.push("/login/v2");
       return;
     }
     setLoading(true);
@@ -105,7 +105,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
         }
       );
       if (response.status === 401) {
-        handleExpiredToken();
+        router.push("/login/v2");
         return;
       }
       const data = await response.json();
@@ -129,7 +129,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
   ) => {
     const accessToken = await getValidAccessToken();
     if (!accessToken) {
-      handleExpiredToken();
+      router.push("/login/v2");
       return;
     }
 
@@ -157,7 +157,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
       });
 
       if (response.status === 401) {
-        handleExpiredToken();
+        router.push("/login/v2");
         return;
       }
 
@@ -187,7 +187,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
 
     const accessToken = await getValidAccessToken();
     if (!accessToken) {
-      handleExpiredToken();
+      router.push("/login/v2");
       return;
     }
 
