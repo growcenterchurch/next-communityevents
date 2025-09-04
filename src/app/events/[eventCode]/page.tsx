@@ -197,7 +197,7 @@ const EventSessions = () => {
                       </Button>
                     ) : details?.allowedFor === "private" ? (
                       <Button onClick={() => handlePrivateRegistration()}>
-                        Register for Private Event
+                        Register for Event
                       </Button>
                     ) : (
                       <Button disabled>Invalid Event Type</Button>
