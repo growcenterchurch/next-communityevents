@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getColumns, CoolNewJoiner } from "./columns";
+import { getColumns } from "./columns";
+import { CoolNewJoiner } from "./types";
 import { DataTable } from "./data-table";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { API_BASE_URL, API_KEY } from "@/lib/config";

@@ -170,16 +170,16 @@ const EventSessions = () => {
 
                   <Separator />
                   <div className="mt-2 pt-4">
-                    <p className="font-semibold text-gray-700">
+                    {/* <p className="font-semibold text-gray-700">
                       Number of seats:
                     </p>
                     <p className="text-sm text-gray-500 my-3">
                       <span className="font-medium text-gray-700">
                         {session.totalRemainingSeats}
                       </span>
-                    </p>
+                    </p> */}
                   </div>
-                  <Separator />
+                  {/* <Separator /> */}
                 </CardContent>
                 <CardFooter>
                   {session.availabilityStatus === "available" ? (

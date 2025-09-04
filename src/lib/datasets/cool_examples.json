@@ -1,0 +1,97 @@
+{
+  "code": 200,
+  "status": "OK",
+  "message": "Request has been successfully processed.",
+  "data": [
+    {
+      "type": "cool",
+      "id": 12,
+      "name": "Northern Sparks",
+      "campusCode": "BDG",
+      "campusName": "GROW Community Bandung",
+      "leaders": [
+        {
+          "type": "user",
+          "communityId": "90347239485",
+          "name": "Ayu Rachmawati"
+        },
+        {
+          "type": "user",
+          "communityId": "90347239486",
+          "name": "Dimas Ardiansyah"
+        }
+      ],
+      "status": "active"
+    },
+    {
+      "type": "cool",
+      "id": 13,
+      "name": "Jakarta Flames",
+      "campusCode": "JKT",
+      "campusName": "GROW Community Jakarta",
+      "leaders": [
+        {
+          "type": "user",
+          "communityId": "78342910572",
+          "name": "Rina Kurniawan"
+        }
+      ],
+      "status": "active"
+    },
+    {
+      "type": "cool",
+      "id": 14,
+      "name": "Bekasi Unity",
+      "campusCode": "BKS",
+      "campusName": "GROW Community Bekasi",
+      "leaders": [
+        {
+          "type": "user",
+          "communityId": "66291720345",
+          "name": "Ferry Oktavianus"
+        }
+      ],
+      "status": "active"
+    },
+    {
+      "type": "cool",
+      "id": 15,
+      "name": "Surabaya Rise",
+      "campusCode": "SBY",
+      "campusName": "GROW Community Surabaya",
+      "leaders": [
+        {
+          "type": "user",
+          "communityId": "11928374567",
+          "name": "Maya Andriani"
+        },
+        {
+          "type": "user",
+          "communityId": "11928374588",
+          "name": "Hendri Wijaya"
+        }
+      ],
+      "status": "active"
+    },
+    {
+      "type": "cool",
+      "id": 16,
+      "name": "Bali Waves",
+      "campusCode": "DPS",
+      "campusName": "GROW Community Bali",
+      "leaders": [
+        {
+          "type": "user",
+          "communityId": "44738291055",
+          "name": "Kadek Suryana"
+        }
+      ],
+      "status": "active"
+    }
+  ],
+  "metadata": {
+    "requestId": "2b9d91a7-8992-4469-8c6b-fd132fcd1f90",
+    "timestamp": "2025-08-03T14:45:00+07:00",
+    "totalRows": 5
+  }
+}

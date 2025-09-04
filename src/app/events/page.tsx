@@ -170,7 +170,7 @@ const EventsPage = () => {
                           </span>
                         </p>
                         <div className="mt-4">
-                          {" "}
+                          {/* {" "}
                           <p className="font-semibold text-gray-700">
                             Total Remaining Seats:
                           </p>
@@ -178,7 +178,7 @@ const EventsPage = () => {
                             <span className="font-medium text-gray-700">
                               {event.totalRemainingSeats}
                             </span>
-                          </p>
+                          </p> */}
                           {/* Link to event sessions page */}
                           <div className="flex justify-center md:justify-start">
                             {event.availabilityStatus === "available" ? (
