@@ -68,8 +68,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-       
-      
+            "X-Refresh-Token": `${refreshToken}`,
           },
           credentials: "include", // ensures browser cookies are also sent
         }
