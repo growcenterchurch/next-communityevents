@@ -182,12 +182,27 @@ const EventsPage = () => {
                           {/* Link to event sessions page */}
                           <div className="flex justify-center md:justify-start">
                             {event.availabilityStatus === "available" ? (
-                              <Button
-                                className="mx-auto w-full "
-                                onClick={() => handleSession(event.code)}
-                              >
-                                Register Now!
-                              </Button>
+                              event.code === "b8d78bd" ? (
+                                <Button
+                                  className="mx-auto w-full"
+                                  onClick={() =>
+                                    window.open(
+                                      "https://docs.google.com/forms/d/e/1FAIpQLSfqh-fBpM8oBpdq2agaEFXzAzL8fTjKrg8qHjib54E0RU_jGQ/viewform",
+                                      "_blank", // open in new tab
+                                      "noopener,noreferrer" // security best practice
+                                    )
+                                  }
+                                >
+                                  Register Now!
+                                </Button>
+                              ) : (
+                                <Button
+                                  className="mx-auto w-full "
+                                  onClick={() => handleSession(event.code)}
+                                >
+                                  Register Now!
+                                </Button>
+                              )
                             ) : event.status === "walkin" ? (
                               <Button disabled>
                                 Walk-in : Register On Site

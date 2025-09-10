@@ -10,7 +10,7 @@
   { "id": 8, "department": "Ibadah Raya 5", "code": "IBADAH_RAYA_5" },
   { "id": 9, "department": "MISI", "code": "MISI" },
   { "id": 10, "department": "Grow Women", "code": "GROW_WOMEN" },
-  { "id": 11, "department": "Grow Man", "code": "GROW_MAN" },
+  { "id": 11, "department": "Grow Men", "code": "GROW_MEN" },
   { "id": 12, "department": "Grow Connection", "code": "GROW_CONNECTION" },
   { "id": 13, "department": "Grow Senior", "code": "GROW_SENIOR" },
   { "id": 14, "department": "Grow Couple", "code": "GROW_COUPLE" },
