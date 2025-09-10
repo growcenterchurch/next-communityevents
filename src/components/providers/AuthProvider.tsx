@@ -9,6 +9,7 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
+import { API_KEY } from "@/lib/config";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -59,27 +60,29 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       console.error("No refresh token found.");
       return false;
     }
-
+    console.log(refreshToken);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/tokens`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-API-Key": "gcgc-2024",
-            Cookie: `refresh_token=${refreshToken}`,
+       
+      
           },
-          credentials: "include", // Ensure cookies are included in the request
+          credentials: "include", // ensures browser cookies are also sent
         }
       );
-
       if (response.ok) {
         const result = await response.json();
-        // Update userData with new tokens
-        userData.tokens = result.tokens;
-        localStorage.setItem("userData", JSON.stringify(userData));
-        return true;
+        if (result?.data) {
+          // Replace only the tokens in userData
+          userData.tokens = result.data;
+          localStorage.setItem("userData", JSON.stringify(userData));
+          return true;
+        }
+        return false;
       } else {
         console.error("Failed to refresh token:", response.statusText);
         return false;
