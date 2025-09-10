@@ -198,59 +198,64 @@ const EventsPage = () => {
                                 📌 Pilihan Hari dan Jam:
                               </p>
 
-                              {/* Selasa */}
-                              <p className="text-sm text-gray-500 mb-2">
-                                <span className="font-medium text-gray-700">
-                                  🗓 Selasa
-                                </span>
-                              </p>
-                              <ul className="list-disc pl-6 text-sm text-gray-500 space-y-1 mb-3">
-                                <li>
-                                  <span className="font-medium text-gray-700">
-                                    Grade 1 &amp; 2
-                                  </span>{" "}
-                                  : 16.00 – 16.30
-                                </li>
-                                <li>
-                                  <span className="font-medium text-gray-700">
-                                    Grade 3 – 6
-                                  </span>{" "}
-                                  : 16.30 – 17.00
-                                </li>
-                                <li>
-                                  <span className="font-medium text-gray-700">
-                                    Grade 3 – 6
-                                  </span>{" "}
-                                  : 17.15 – 17.45
-                                </li>
-                              </ul>
-
-                              {/* Kamis */}
-                              <p className="text-sm text-gray-500 mb-2">
-                                <span className="font-medium text-gray-700">
-                                  🗓 Kamis
-                                </span>
-                              </p>
-                              <ul className="list-disc pl-6 text-sm text-gray-500 space-y-1">
-                                <li>
-                                  <span className="font-medium text-gray-700">
-                                    Grade 1 &amp; 2
-                                  </span>{" "}
-                                  : 16.00 – 16.30
-                                </li>
-                                <li>
-                                  <span className="font-medium text-gray-700">
-                                    Grade 3 – 6
-                                  </span>{" "}
-                                  : 16.30 – 17.00
-                                </li>
-                                <li>
-                                  <span className="font-medium text-gray-700">
-                                    Grade 3 – 6
-                                  </span>{" "}
-                                  : 17.15 – 17.45
-                                </li>
-                              </ul>
+                              <div className="flex flex-col md:flex-row gap-6 w-full">
+                                {/* Selasa */}
+                                <div className="flex-1">
+                                  <p className="text-sm text-gray-500 mb-2">
+                                    <span className="font-medium text-gray-700">
+                                      🗓 Selasa
+                                    </span>
+                                  </p>
+                                  <ul className="list-disc pl-6 text-sm text-gray-500 space-y-1 mb-3">
+                                    <li>
+                                      <span className="font-medium text-gray-700">
+                                        Grade 1 &amp; 2
+                                      </span>{" "}
+                                      : 16.00 – 16.30
+                                    </li>
+                                    <li>
+                                      <span className="font-medium text-gray-700">
+                                        Grade 3 – 6
+                                      </span>{" "}
+                                      : 16.30 – 17.00
+                                    </li>
+                                    <li>
+                                      <span className="font-medium text-gray-700">
+                                        Grade 3 – 6
+                                      </span>{" "}
+                                      : 17.15 – 17.45
+                                    </li>
+                                  </ul>
+                                </div>
+                                {/* Kamis */}
+                                <div className="flex-1">
+                                  <p className="text-sm text-gray-500 mb-2">
+                                    <span className="font-medium text-gray-700">
+                                      🗓 Kamis
+                                    </span>
+                                  </p>
+                                  <ul className="list-disc pl-6 text-sm text-gray-500 space-y-1">
+                                    <li>
+                                      <span className="font-medium text-gray-700">
+                                        Grade 1 &amp; 2
+                                      </span>{" "}
+                                      : 16.00 – 16.30
+                                    </li>
+                                    <li>
+                                      <span className="font-medium text-gray-700">
+                                        Grade 3 – 6
+                                      </span>{" "}
+                                      : 16.30 – 17.00
+                                    </li>
+                                    <li>
+                                      <span className="font-medium text-gray-700">
+                                        Grade 3 – 6
+                                      </span>{" "}
+                                      : 17.15 – 17.45
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
                             </div>
                           </>
                         ) : (
