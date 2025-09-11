@@ -217,7 +217,7 @@ const EventsPage = () => {
                                       <span className="font-medium text-gray-700">
                                         Grade 3 – 6
                                       </span>{" "}
-                                      : 16.30 – 17.00
+                                      : 16.30 – 17.00 <strong>(Full)</strong>
                                     </li>
                                     <li>
                                       <span className="font-medium text-gray-700">
@@ -239,7 +239,7 @@ const EventsPage = () => {
                                       <span className="font-medium text-gray-700">
                                         Grade 1 &amp; 2
                                       </span>{" "}
-                                      : 16.00 – 16.30
+                                      : 16.00 – 16.30 <strong>(Full)</strong>
                                     </li>
                                     <li>
                                       <span className="font-medium text-gray-700">
