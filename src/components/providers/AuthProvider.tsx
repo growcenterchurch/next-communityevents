@@ -18,6 +18,7 @@ interface AuthContextType {
   handleExpiredToken: () => void;
   getValidAccessToken: () => Promise<string | null>;
   loading: boolean;
+  checkAndRedirectUser: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -29,6 +30,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState(true); // Loading state
   const router = useRouter();
   const { toast } = useToast();
+
+  const checkAndRedirectUser = async () => {
+    const rawUserData =
+      typeof window !== "undefined" ? localStorage.getItem("userData") : null;
+    const userData =
+      rawUserData && rawUserData !== "null" && rawUserData !== ""
+        ? JSON.parse(rawUserData)
+        : null;
+
+    if (!userData) {
+      router.push("/login/v2");
+      return;
+    }
+
+    const accessToken = await getValidAccessToken();
+    if (accessToken) {
+      router.push("/home");
+      return;
+    }
+
+    // Try to refresh token if expired
+    const refreshed = await refreshAccessToken();
+    if (refreshed) {
+      router.push("/home");
+    } else {
+      router.push("/login/v2");
+    }
+  };
 
   useEffect(() => {
     const userData = localStorage.getItem("userData");
@@ -152,6 +181,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         handleExpiredToken,
         getValidAccessToken,
         loading,
+        checkAndRedirectUser,
       }}
     >
       {children}
