@@ -132,45 +132,47 @@ const EventSessions = () => {
           <p className="text-center">No sessions available for this event.</p>
         ) : (
           // Display fetched sessions
-          sessions.map((session) => (
-            <Card
-              key={session.code}
-              className="rounded-xl mx-2 my-5 md:w-1/2 md:mx-auto"
-            >
-              <div className="flex flex-col">
-                <CardHeader>
-                  <CardTitle>{session.title}</CardTitle> {/* Session Title */}
-                </CardHeader>
-                <CardContent className="flex flex-col">
-                  <Badge
-                    className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
-                      session.availabilityStatus === "available"
-                        ? "bg-green-700"
-                        : session.availabilityStatus === "unavailable"
-                        ? "bg-red-500"
-                        : "bg-gray-400" // Default color for other statuses
-                    }`}
-                  >
-                    <span className="mx-auto">
-                      {session.availabilityStatus}
-                    </span>
-                  </Badge>
-                  <p className="text-base font-light my-2 pb-2">
-                    {session.description}
-                  </p>
-                  <Separator />
-                  <div className="mt-2 pt-4">
-                    <p className="font-semibold text-gray-700">Event Time:</p>
-                    <p className="text-sm text-gray-500 my-3">
-                      <span className="font-medium text-gray-700">
-                        {formatDate(new Date(session.instanceStartAt))}
+          sessions
+            .filter((session) => session.availabilityStatus !== "unavailable")
+            .map((session) => (
+              <Card
+                key={session.code}
+                className="rounded-xl mx-2 my-5 md:w-1/2 md:mx-auto"
+              >
+                <div className="flex flex-col">
+                  <CardHeader>
+                    <CardTitle>{session.title}</CardTitle> {/* Session Title */}
+                  </CardHeader>
+                  <CardContent className="flex flex-col">
+                    <Badge
+                      className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
+                        session.availabilityStatus === "available"
+                          ? "bg-green-700"
+                          : session.availabilityStatus === "unavailable"
+                          ? "bg-red-500"
+                          : "bg-gray-400" // Default color for other statuses
+                      }`}
+                    >
+                      <span className="mx-auto">
+                        {session.availabilityStatus}
                       </span>
+                    </Badge>
+                    <p className="text-base font-light my-2 pb-2">
+                      {session.description}
                     </p>
-                  </div>
+                    <Separator />
+                    <div className="mt-2 pt-4">
+                      <p className="font-semibold text-gray-700">Event Time:</p>
+                      <p className="text-sm text-gray-500 my-3">
+                        <span className="font-medium text-gray-700">
+                          {formatDate(new Date(session.instanceStartAt))}
+                        </span>
+                      </p>
+                    </div>
 
-                  <Separator />
-                  <div className="mt-2 pt-4">
-                    {/* <p className="font-semibold text-gray-700">
+                    <Separator />
+                    <div className="mt-2 pt-4">
+                      {/* <p className="font-semibold text-gray-700">
                       Number of seats:
                     </p>
                     <p className="text-sm text-gray-500 my-3">
@@ -178,37 +180,37 @@ const EventSessions = () => {
                         {session.totalRemainingSeats}
                       </span>
                     </p> */}
-                  </div>
-                  {/* <Separator /> */}
-                </CardContent>
-                <CardFooter>
-                  {session.availabilityStatus === "available" ? (
-                    details?.allowedFor === "public" ? (
-                      <Button
-                        onClick={() =>
-                          handleRegistration(
-                            eventCode,
-                            session.code,
-                            session.maxPerTransaction
-                          )
-                        }
-                      >
-                        Register Now!
-                      </Button>
-                    ) : details?.allowedFor === "private" ? (
-                      <Button onClick={() => handlePrivateRegistration()}>
-                        Register for Event
-                      </Button>
+                    </div>
+                    {/* <Separator /> */}
+                  </CardContent>
+                  <CardFooter>
+                    {session.availabilityStatus === "available" ? (
+                      details?.allowedFor === "public" ? (
+                        <Button
+                          onClick={() =>
+                            handleRegistration(
+                              eventCode,
+                              session.code,
+                              session.maxPerTransaction
+                            )
+                          }
+                        >
+                          Register Now!
+                        </Button>
+                      ) : details?.allowedFor === "private" ? (
+                        <Button onClick={() => handlePrivateRegistration()}>
+                          Register for Event
+                        </Button>
+                      ) : (
+                        <Button disabled>Invalid Event Type</Button>
+                      )
                     ) : (
-                      <Button disabled>Invalid Event Type</Button>
-                    )
-                  ) : (
-                    <Button disabled>Registration Closed</Button>
-                  )}
-                </CardFooter>
-              </div>
-            </Card>
-          ))
+                      <Button disabled>Registration Closed</Button>
+                    )}
+                  </CardFooter>
+                </div>
+              </Card>
+            ))
         )}
       </main>
     </>

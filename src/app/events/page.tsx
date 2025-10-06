@@ -97,204 +97,208 @@ const EventsPage = () => {
               <LoadingSpinner />
             </p>
           ) : events && events.length > 0 ? (
-            events.map((event) => (
-              <Card key={event.code} className="rounded-xl mb-4">
-                <div className="flex flex-col md:flex-row">
-                  {/* Left Half / Top Half: Image */}
-                  <div className="relative md:w-1/2 h-60 md:h-96 overflow-hidden rounded-t-lg md:rounded-l-lg">
-                    <Image
-                      src={event.imagesLinks[0]}
-                      alt="Event Image"
-                      layout="fill"
-                      className="object-contain"
-                      priority
-                    />
-                  </div>
-                  {/* Right Half / Bottom Half: Event Information */}
-                  <div className="md:w-1/2">
-                    <CardHeader>
-                      <CardTitle className="mx-auto md:mx-0">
-                        {event.title}
-                      </CardTitle>{" "}
-                      {/* Event name */}
-                    </CardHeader>
-                    <CardContent className="flex flex-col items-center md:items-start">
-                      <div className="flex flex-row gap-x-3">
-                        <Badge
-                          className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
-                            event.availabilityStatus === "available"
-                              ? "bg-green-700"
-                              : "bg-gray-500" // Default color for other statuses
-                          }`}
-                        >
-                          <span className="mx-auto">
-                            {event.availabilityStatus}
-                          </span>
-                        </Badge>
-                        <Badge
-                          className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
-                            event.locationType === "onsite"
-                              ? "bg-green-700"
-                              : "bg-primary" // Default color for other statuses
-                          }`}
-                        >
-                          <span className="mx-auto">{event.locationType}</span>
-                        </Badge>
-                      </div>
+            events
+              .filter((event) => event.availabilityStatus !== "unavailable")
+              .map((event) => (
+                <Card key={event.code} className="rounded-xl mb-4">
+                  <div className="flex flex-col md:flex-row">
+                    {/* Left Half / Top Half: Image */}
+                    <div className="relative md:w-1/2 h-60 md:h-96 overflow-hidden rounded-t-lg md:rounded-l-lg">
+                      <Image
+                        src={event.imagesLinks[0]}
+                        alt="Event Image"
+                        layout="fill"
+                        className="object-contain"
+                        priority
+                      />
+                    </div>
+                    {/* Right Half / Bottom Half: Event Information */}
+                    <div className="md:w-1/2">
+                      <CardHeader>
+                        <CardTitle className="mx-auto md:mx-0">
+                          {event.title}
+                        </CardTitle>{" "}
+                        {/* Event name */}
+                      </CardHeader>
+                      <CardContent className="flex flex-col items-center md:items-start">
+                        <div className="flex flex-row gap-x-3">
+                          <Badge
+                            className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
+                              event.availabilityStatus === "available"
+                                ? "bg-green-700"
+                                : "bg-gray-500" // Default color for other statuses
+                            }`}
+                          >
+                            <span className="mx-auto">
+                              {event.availabilityStatus}
+                            </span>
+                          </Badge>
+                          <Badge
+                            className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
+                              event.locationType === "onsite"
+                                ? "bg-green-700"
+                                : "bg-primary" // Default color for other statuses
+                            }`}
+                          >
+                            <span className="mx-auto">
+                              {event.locationType}
+                            </span>
+                          </Badge>
+                        </div>
 
-                      <div className="p-4">
-                        {event.code === "b8d78bd" ? (
-                          <>
-                            {/* Section: Special Training Info */}
-                            <div className="p-4">
-                              <p className="text-sm text-gray-500 mb-3">
-                                <span className="font-medium text-gray-700">
-                                  Pelatihan Bernyanyi Dasar (Training for Basic
-                                  Singing)
-                                </span>{" "}
-                                bagi anak-anak Grow Children kelas 1–6 SD oleh{" "}
-                                <span className="font-medium text-gray-700">
-                                  Elaine Tjokro
-                                </span>
-                                .
-                              </p>
-
-                              <p className="font-semibold text-gray-700 mb-2">
-                                📌 Informasi Pelatihan:
-                              </p>
-                              <ul className="list-disc pl-6 text-sm text-gray-500 space-y-1 mb-4">
-                                <li>
-                                  Pelatihan dimulai tanggal{" "}
+                        <div className="p-4">
+                          {event.code === "b8d78bd" ? (
+                            <>
+                              {/* Section: Special Training Info */}
+                              <div className="p-4">
+                                <p className="text-sm text-gray-500 mb-3">
                                   <span className="font-medium text-gray-700">
-                                    7 Oktober 2025
+                                    Pelatihan Bernyanyi Dasar (Training for
+                                    Basic Singing)
                                   </span>{" "}
-                                  sampai minggu pertama bulan{" "}
+                                  bagi anak-anak Grow Children kelas 1–6 SD oleh{" "}
                                   <span className="font-medium text-gray-700">
-                                    Desember 2025
+                                    Elaine Tjokro
                                   </span>
                                   .
-                                </li>
-                                <li>
-                                  Pelatihan berlangsung{" "}
-                                  <span className="font-medium text-gray-700">
-                                    1x seminggu
-                                  </span>{" "}
-                                  dengan durasi{" "}
-                                  <span className="font-medium text-gray-700">
-                                    30 menit
-                                  </span>
-                                  .
-                                </li>
-                                <li>
-                                  <em>
-                                    Jadwal hanya dipilih satu yang paling
-                                    sesuai.
-                                  </em>
-                                </li>
-                              </ul>
+                                </p>
 
-                              {/* Section: Schedule */}
-                              <p className="font-semibold text-gray-700 mb-2">
-                                📌 Pilihan Hari dan Jam:
-                              </p>
+                                <p className="font-semibold text-gray-700 mb-2">
+                                  📌 Informasi Pelatihan:
+                                </p>
+                                <ul className="list-disc pl-6 text-sm text-gray-500 space-y-1 mb-4">
+                                  <li>
+                                    Pelatihan dimulai tanggal{" "}
+                                    <span className="font-medium text-gray-700">
+                                      7 Oktober 2025
+                                    </span>{" "}
+                                    sampai minggu pertama bulan{" "}
+                                    <span className="font-medium text-gray-700">
+                                      Desember 2025
+                                    </span>
+                                    .
+                                  </li>
+                                  <li>
+                                    Pelatihan berlangsung{" "}
+                                    <span className="font-medium text-gray-700">
+                                      1x seminggu
+                                    </span>{" "}
+                                    dengan durasi{" "}
+                                    <span className="font-medium text-gray-700">
+                                      30 menit
+                                    </span>
+                                    .
+                                  </li>
+                                  <li>
+                                    <em>
+                                      Jadwal hanya dipilih satu yang paling
+                                      sesuai.
+                                    </em>
+                                  </li>
+                                </ul>
 
-                              <div className="flex flex-col md:flex-row gap-6 w-full">
-                                {/* Selasa */}
-                                <div className="flex-1">
-                                  <p className="text-sm text-gray-500 mb-2">
-                                    <span className="font-medium text-gray-700">
-                                      🗓 Selasa
-                                    </span>
-                                  </p>
-                                  <ul className="list-disc pl-6 text-sm text-gray-500 space-y-1 mb-3">
-                                    <li>
+                                {/* Section: Schedule */}
+                                <p className="font-semibold text-gray-700 mb-2">
+                                  📌 Pilihan Hari dan Jam:
+                                </p>
+
+                                <div className="flex flex-col md:flex-row gap-6 w-full">
+                                  {/* Selasa */}
+                                  <div className="flex-1">
+                                    <p className="text-sm text-gray-500 mb-2">
                                       <span className="font-medium text-gray-700">
-                                        Grade 1 &amp; 2
-                                      </span>{" "}
-                                      : 16.00 – 16.30
-                                    </li>
-                                    <li>
+                                        🗓 Selasa
+                                      </span>
+                                    </p>
+                                    <ul className="list-disc pl-6 text-sm text-gray-500 space-y-1 mb-3">
+                                      <li>
+                                        <span className="font-medium text-gray-700">
+                                          Grade 1 &amp; 2
+                                        </span>{" "}
+                                        : 16.00 – 16.30 <strong>(Full)</strong>
+                                      </li>
+                                      <li>
+                                        <span className="font-medium text-gray-700">
+                                          Grade 3 – 6
+                                        </span>{" "}
+                                        : 16.30 – 17.00 <strong>(Full)</strong>
+                                      </li>
+                                      <li>
+                                        <span className="font-medium text-gray-700">
+                                          Grade 3 – 6
+                                        </span>{" "}
+                                        : 17.15 – 17.45
+                                      </li>
+                                    </ul>
+                                  </div>
+                                  {/* Kamis */}
+                                  <div className="flex-1">
+                                    <p className="text-sm text-gray-500 mb-2">
                                       <span className="font-medium text-gray-700">
-                                        Grade 3 – 6
-                                      </span>{" "}
-                                      : 16.30 – 17.00 <strong>(Full)</strong>
-                                    </li>
-                                    <li>
-                                      <span className="font-medium text-gray-700">
-                                        Grade 3 – 6
-                                      </span>{" "}
-                                      : 17.15 – 17.45
-                                    </li>
-                                  </ul>
-                                </div>
-                                {/* Kamis */}
-                                <div className="flex-1">
-                                  <p className="text-sm text-gray-500 mb-2">
-                                    <span className="font-medium text-gray-700">
-                                      🗓 Kamis
-                                    </span>
-                                  </p>
-                                  <ul className="list-disc pl-6 text-sm text-gray-500 space-y-1">
-                                    <li>
-                                      <span className="font-medium text-gray-700">
-                                        Grade 1 &amp; 2
-                                      </span>{" "}
-                                      : 16.00 – 16.30 <strong>(Full)</strong>
-                                    </li>
-                                    <li>
-                                      <span className="font-medium text-gray-700">
-                                        Grade 3 – 6
-                                      </span>{" "}
-                                      : 16.30 – 17.00
-                                    </li>
-                                    <li>
-                                      <span className="font-medium text-gray-700">
-                                        Grade 3 – 6
-                                      </span>{" "}
-                                      : 17.15 – 17.45
-                                    </li>
-                                  </ul>
+                                        🗓 Kamis
+                                      </span>
+                                    </p>
+                                    <ul className="list-disc pl-6 text-sm text-gray-500 space-y-1">
+                                      <li>
+                                        <span className="font-medium text-gray-700">
+                                          Grade 1 &amp; 2
+                                        </span>{" "}
+                                        : 16.00 – 16.30 <strong>(Full)</strong>
+                                      </li>
+                                      <li>
+                                        <span className="font-medium text-gray-700">
+                                          Grade 3 – 6
+                                        </span>{" "}
+                                        : 16.30 – 17.00
+                                      </li>
+                                      <li>
+                                        <span className="font-medium text-gray-700">
+                                          Grade 3 – 6
+                                        </span>{" "}
+                                        : 17.15 – 17.45
+                                      </li>
+                                    </ul>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <p className="font-semibold text-gray-700">
-                              Event Time:
-                            </p>
-                            <p className="text-sm text-gray-500 mb-3">
-                              <span className="font-medium text-gray-700">
-                                Start:{" "}
-                                {formatDate(new Date(event.eventStartAt))}
-                              </span>
-                            </p>
-                            <p className="text-sm text-gray-500 mb-3">
-                              <span className="font-medium text-gray-700">
-                                End: {formatDate(new Date(event.eventEndAt))}
-                              </span>
-                            </p>
+                            </>
+                          ) : (
+                            <>
+                              <p className="font-semibold text-gray-700">
+                                Event Time:
+                              </p>
+                              <p className="text-sm text-gray-500 mb-3">
+                                <span className="font-medium text-gray-700">
+                                  Start:{" "}
+                                  {formatDate(new Date(event.eventStartAt))}
+                                </span>
+                              </p>
+                              <p className="text-sm text-gray-500 mb-3">
+                                <span className="font-medium text-gray-700">
+                                  End: {formatDate(new Date(event.eventEndAt))}
+                                </span>
+                              </p>
 
-                            <p className="font-semibold text-gray-700">
-                              Registration Time:
-                            </p>
-                            <p className="text-sm text-gray-500 mb-3">
-                              <span className="font-medium text-gray-700">
-                                Open:{" "}
-                                {formatDate(new Date(event.registerStartAt))}
-                              </span>
-                            </p>
-                            <p className="text-sm text-gray-500 mb-3">
-                              <span className="font-medium text-gray-700">
-                                Closed:{" "}
-                                {formatDate(new Date(event.registerEndAt))}
-                              </span>
-                            </p>
-                          </>
-                        )}
+                              <p className="font-semibold text-gray-700">
+                                Registration Time:
+                              </p>
+                              <p className="text-sm text-gray-500 mb-3">
+                                <span className="font-medium text-gray-700">
+                                  Open:{" "}
+                                  {formatDate(new Date(event.registerStartAt))}
+                                </span>
+                              </p>
+                              <p className="text-sm text-gray-500 mb-3">
+                                <span className="font-medium text-gray-700">
+                                  Closed:{" "}
+                                  {formatDate(new Date(event.registerEndAt))}
+                                </span>
+                              </p>
+                            </>
+                          )}
 
-                        <div className="mt-4">
-                          {/* {" "}
+                          <div className="mt-4">
+                            {/* {" "}
                           <p className="font-semibold text-gray-700">
                             Total Remaining Seats:
                           </p>
@@ -303,48 +307,48 @@ const EventsPage = () => {
                               {event.totalRemainingSeats}
                             </span>
                           </p> */}
-                          {/* Link to event sessions page */}
-                          <div className="flex justify-center md:justify-start">
-                            {event.availabilityStatus === "available" ? (
-                              event.code === "b8d78bd" ? (
-                                <Button
-                                  className="mx-auto w-full"
-                                  onClick={() =>
-                                    window.open(
-                                      "https://docs.google.com/forms/d/e/1FAIpQLSfqh-fBpM8oBpdq2agaEFXzAzL8fTjKrg8qHjib54E0RU_jGQ/viewform",
-                                      "_blank", // open in new tab
-                                      "noopener,noreferrer" // security best practice
-                                    )
-                                  }
-                                >
-                                  Register Now!
+                            {/* Link to event sessions page */}
+                            <div className="flex justify-center md:justify-start">
+                              {event.availabilityStatus === "available" ? (
+                                event.code === "b8d78bd" ? (
+                                  <Button
+                                    className="mx-auto w-full"
+                                    onClick={() =>
+                                      window.open(
+                                        "https://docs.google.com/forms/d/e/1FAIpQLSfqh-fBpM8oBpdq2agaEFXzAzL8fTjKrg8qHjib54E0RU_jGQ/viewform",
+                                        "_blank", // open in new tab
+                                        "noopener,noreferrer" // security best practice
+                                      )
+                                    }
+                                  >
+                                    Register Now!
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    className="mx-auto w-full "
+                                    onClick={() => handleSession(event.code)}
+                                  >
+                                    Register Now!
+                                  </Button>
+                                )
+                              ) : event.status === "walkin" ? (
+                                <Button disabled>
+                                  Walk-in : Register On Site
                                 </Button>
                               ) : (
-                                <Button
-                                  className="mx-auto w-full "
-                                  onClick={() => handleSession(event.code)}
-                                >
-                                  Register Now!
-                                </Button>
-                              )
-                            ) : event.status === "walkin" ? (
-                              <Button disabled>
-                                Walk-in : Register On Site
-                              </Button>
-                            ) : (
-                              <>
-                                <Button disabled>Unavailable</Button>
-                              </>
-                            )}
+                                <>
+                                  <Button disabled>Unavailable</Button>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-center md:justify-start"></CardFooter>
+                      </CardContent>
+                      <CardFooter className="flex justify-center md:justify-start"></CardFooter>
+                    </div>
                   </div>
-                </div>
-              </Card>
-            ))
+                </Card>
+              ))
           ) : events && events.length === 0 ? (
             <p>No events found.</p>
           ) : (
