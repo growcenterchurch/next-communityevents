@@ -227,7 +227,7 @@ const EventsPage = () => {
                                         <span className="font-medium text-gray-700">
                                           Grade 3 – 6
                                         </span>{" "}
-                                        : 17.15 – 17.45
+                                        : 17.15 – 17.45 <strong>(Full)</strong>
                                       </li>
                                     </ul>
                                   </div>
