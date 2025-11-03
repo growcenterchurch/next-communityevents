@@ -268,24 +268,37 @@ const EventsPage = () => {
                             </>
                           ) : event.code === "9b52177" ? (
                             <>
-                              <p className="font-semibold text-gray-700">
-                                Event Time:
-                              </p>
-                              <p className="text-sm text-gray-500 mb-3">
-                                <span className="font-medium text-gray-700">
-                                  Start:{" "}
-                                  {formatDate(new Date(event.eventStartAt))}
-                                </span>
-                              </p>
-                              <p className="text-sm text-gray-500 mb-3">
-                                <span className="font-medium text-gray-700">
-                                  End: {formatDate(new Date(event.eventEndAt))}
-                                </span>
-                              </p>
                               <p className="text-sm text-gray-500 mb-3">
                                 Mari bersama-sama membangun mezbah doa dan
                                 mendengarkan Firman Tuhan setiap pagi! 🔥🙌
                               </p>
+                              <div className="text-sm text-gray-500 mb-4 space-y-2">
+                                <p className="font-semibold text-gray-700">
+                                  📌 Informasi Pertemuan:
+                                </p>
+                                <ul className="list-disc pl-4 space-y-1">
+                                  <li>
+                                    Dilaksanakan setiap
+                                    <span className="font-medium text-gray-700">
+                                      {" "}
+                                      Selasa sampai Kamis
+                                    </span>
+                                    .
+                                  </li>
+                                  <li>
+                                    Waktu pertemuan pukul
+                                    <span className="font-medium text-gray-700">
+                                      {" "}
+                                      06.00 – 07.00 WIB
+                                    </span>
+                                    .
+                                  </li>
+                                  <li>
+                                    Pertemuan berlangsung secara online via
+                                    Zoom.
+                                  </li>
+                                </ul>
+                              </div>
                             </>
                           ) : (
                             <>
