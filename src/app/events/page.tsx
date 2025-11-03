@@ -116,7 +116,9 @@ const EventsPage = () => {
                     <div className="md:w-1/2">
                       <CardHeader>
                         <CardTitle className="mx-auto md:mx-0">
-                          {event.title}
+                          {event.code === "9b52177"
+                            ? "GHOP Online"
+                            : event.title}
                         </CardTitle>{" "}
                         {/* Event name */}
                       </CardHeader>
@@ -130,7 +132,9 @@ const EventsPage = () => {
                             }`}
                           >
                             <span className="mx-auto">
-                              {event.availabilityStatus}
+                              {event.code === "9b52177"
+                                ? "zoom"
+                                : event.availabilityStatus}
                             </span>
                           </Badge>
                           <Badge
@@ -262,6 +266,27 @@ const EventsPage = () => {
                                 </div>
                               </div>
                             </>
+                          ) : event.code === "9b52177" ? (
+                            <>
+                              <p className="font-semibold text-gray-700">
+                                Event Time:
+                              </p>
+                              <p className="text-sm text-gray-500 mb-3">
+                                <span className="font-medium text-gray-700">
+                                  Start:{" "}
+                                  {formatDate(new Date(event.eventStartAt))}
+                                </span>
+                              </p>
+                              <p className="text-sm text-gray-500 mb-3">
+                                <span className="font-medium text-gray-700">
+                                  End: {formatDate(new Date(event.eventEndAt))}
+                                </span>
+                              </p>
+                              <p className="text-sm text-gray-500 mb-3">
+                                Mari bersama-sama membangun mezbah doa dan
+                                mendengarkan Firman Tuhan setiap pagi! 🔥🙌
+                              </p>
+                            </>
                           ) : (
                             <>
                               <p className="font-semibold text-gray-700">
@@ -309,15 +334,28 @@ const EventsPage = () => {
                           </p> */}
                             {/* Link to event sessions page */}
                             <div className="flex justify-center md:justify-start">
-                              {event.availabilityStatus === "available" ? (
+                              {event.code === "9b52177" ? (
+                                <Button
+                                  className="mx-auto w-full"
+                                  onClick={() =>
+                                    window.open(
+                                      "https://us02web.zoom.us/j/6818886818?pwd=VVEbaIaBAa8TSEblu2hqalrXSRfrRs.1&omn=82687139138",
+                                      "_blank",
+                                      "noopener,noreferrer"
+                                    )
+                                  }
+                                >
+                                  Join Zoom
+                                </Button>
+                              ) : event.availabilityStatus === "available" ? (
                                 event.code === "b8d78bd" ? (
                                   <Button
                                     className="mx-auto w-full"
                                     onClick={() =>
                                       window.open(
                                         "https://docs.google.com/forms/d/e/1FAIpQLSfqh-fBpM8oBpdq2agaEFXzAzL8fTjKrg8qHjib54E0RU_jGQ/viewform",
-                                        "_blank", // open in new tab
-                                        "noopener,noreferrer" // security best practice
+                                        "_blank",
+                                        "noopener,noreferrer"
                                       )
                                     }
                                   >
