@@ -290,7 +290,7 @@ const EventSessions = () => {
                                     >
                                       <div className="flex flex-col text-left">
                                         <span className="text-sm font-semibold text-gray-900">
-                                          {option.number}
+                                          Preservice {option.number}
                                         </span>
                                         <span className="text-xs text-gray-600">
                                           {option.time}
