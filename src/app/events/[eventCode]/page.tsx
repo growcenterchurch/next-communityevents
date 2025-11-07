@@ -18,6 +18,14 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import withAuth from "@/components/providers/AuthWrapper";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils";
+import VerifyTicketDialog from "@/components/VerifyTicketDialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 interface EventDetails {
   type: string;
@@ -42,12 +50,52 @@ interface EventDetails {
   topics: string[];
 }
 
+const PRE_SERVICE_IR_OPTIONS = [
+  {
+    number: "IR 1",
+    time: "Pk. 07.30 Pagi",
+    location: "Hall lantai 3 PIOT 6",
+    team: "Tim IR 08.30",
+  },
+  {
+    number: "IR 2",
+    time: "Pk. 09.00 Pagi",
+    location: "Fellowship IR, PIOT 6 Lantai 6",
+    team: "Tim IR 10.30",
+  },
+  {
+    number: "IR 3",
+    time: "Pk. 11.00 Siang",
+    location: "Ruang Fellowship IR, PIOT 6 Lantai 6",
+    team: "Tim IR 13.00",
+  },
+  {
+    number: "IR 4",
+    time: "Pk. 14.30 Siang",
+    location: "Ruang Fellowship IR, PIOT 6 Lantai 6",
+    team: "Tim IR 16.00",
+  },
+  {
+    number: "IR 5",
+    time: "Pk. 16.30 Sore",
+    location: "Ruang Fellowship IR, PIOT 6 Lantai 6",
+    team: "Tim IR 18.00",
+  },
+] as const;
+
 const EventSessions = () => {
   const { eventCode } = useParams(); // Retrieve eventCode from the route params
+  const normalizedEventCode = Array.isArray(eventCode)
+    ? eventCode[0]
+    : eventCode ?? "";
+  const isPreServiceEvent = normalizedEventCode === "5f75ed1";
   const [sessions, setSessions] = useState<any[]>([]); // State to hold sessions
   const [details, setDetails] = useState<EventDetails | null>(null); // State to hold sessions
   const [isLoading, setIsLoading] = useState<boolean>(false); // State for loading
   const [error, setError] = useState<string | null>(null); // State for errors
+  const [selectedIrBySession, setSelectedIrBySession] = useState<
+    Record<string, string>
+  >({});
   const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
     useAuth();
 
@@ -66,7 +114,7 @@ const EventSessions = () => {
 
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/v2/events/${eventCode}`,
+          `${API_BASE_URL}/api/v2/events/${normalizedEventCode}`,
           {
             headers: {
               "X-API-KEY": API_KEY || "",
@@ -103,7 +151,7 @@ const EventSessions = () => {
     }
 
     fetchSessions();
-  }, [eventCode]);
+  }, [normalizedEventCode]);
 
   function handleRegistration(
     eventCode: string | string[],
@@ -116,8 +164,11 @@ const EventSessions = () => {
   }
 
   function handlePrivateRegistration() {
-    return router.push(`/events/${eventCode}/internal`);
+    return router.push(`/events/${normalizedEventCode}/internal`);
   }
+
+  const getSelectedIrValue = (sessionCode: string) =>
+    selectedIrBySession[sessionCode] ?? PRE_SERVICE_IR_OPTIONS[0].number;
 
   return (
     <>
@@ -134,45 +185,55 @@ const EventSessions = () => {
           // Display fetched sessions
           sessions
             .filter((session) => session.availabilityStatus !== "unavailable")
-            .map((session) => (
-              <Card
-                key={session.code}
-                className="rounded-xl mx-2 my-5 md:w-1/2 md:mx-auto"
-              >
-                <div className="flex flex-col">
-                  <CardHeader>
-                    <CardTitle>{session.title}</CardTitle> {/* Session Title */}
-                  </CardHeader>
-                  <CardContent className="flex flex-col">
-                    <Badge
-                      className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
-                        session.availabilityStatus === "available"
-                          ? "bg-green-700"
-                          : session.availabilityStatus === "unavailable"
-                          ? "bg-red-500"
-                          : "bg-gray-400" // Default color for other statuses
-                      }`}
-                    >
-                      <span className="mx-auto">
-                        {session.availabilityStatus}
-                      </span>
-                    </Badge>
-                    <p className="text-base font-light my-2 pb-2">
-                      {session.description}
-                    </p>
-                    <Separator />
-                    <div className="mt-2 pt-4">
-                      <p className="font-semibold text-gray-700">Event Time:</p>
-                      <p className="text-sm text-gray-500 my-3">
-                        <span className="font-medium text-gray-700">
-                          {formatDate(new Date(session.instanceStartAt))}
-                        </span>
-                      </p>
-                    </div>
+            .map((session) => {
+              const currentIrValue = getSelectedIrValue(session.code);
+              const currentIrOption =
+                PRE_SERVICE_IR_OPTIONS.find(
+                  (option) => option.number === currentIrValue
+                ) ?? PRE_SERVICE_IR_OPTIONS[0];
 
-                    <Separator />
-                    <div className="mt-2 pt-4">
-                      {/* <p className="font-semibold text-gray-700">
+              return (
+                <Card
+                  key={session.code}
+                  className="rounded-xl mx-2 my-5 md:w-1/2 md:mx-auto"
+                >
+                  <div className="flex flex-col">
+                    <CardHeader>
+                      <CardTitle>{session.title}</CardTitle>{" "}
+                      {/* Session Title */}
+                    </CardHeader>
+                    <CardContent className="flex flex-col">
+                      <Badge
+                        className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
+                          session.availabilityStatus === "available"
+                            ? "bg-green-700"
+                            : session.availabilityStatus === "unavailable"
+                            ? "bg-red-500"
+                            : "bg-gray-400" // Default color for other statuses
+                        }`}
+                      >
+                        <span className="mx-auto">
+                          {session.availabilityStatus}
+                        </span>
+                      </Badge>
+                      <p className="text-base font-light my-2 pb-2">
+                        {session.description}
+                      </p>
+                      <Separator />
+                      <div className="mt-2 pt-4">
+                        <p className="font-semibold text-gray-700">
+                          Event Time:
+                        </p>
+                        <p className="text-sm text-gray-500 my-3">
+                          <span className="font-medium text-gray-700">
+                            {formatDate(new Date(session.instanceStartAt))}
+                          </span>
+                        </p>
+                      </div>
+
+                      <Separator />
+                      <div className="mt-2 pt-4">
+                        {/* <p className="font-semibold text-gray-700">
                       Number of seats:
                     </p>
                     <p className="text-sm text-gray-500 my-3">
@@ -180,37 +241,109 @@ const EventSessions = () => {
                         {session.totalRemainingSeats}
                       </span>
                     </p> */}
-                    </div>
-                    {/* <Separator /> */}
-                  </CardContent>
-                  <CardFooter>
-                    {session.availabilityStatus === "available" ? (
-                      details?.allowedFor === "public" ? (
-                        <Button
-                          onClick={() =>
-                            handleRegistration(
-                              eventCode,
-                              session.code,
-                              session.maxPerTransaction
-                            )
-                          }
-                        >
-                          Register Now!
-                        </Button>
-                      ) : details?.allowedFor === "private" ? (
-                        <Button onClick={() => handlePrivateRegistration()}>
-                          Register for Event
-                        </Button>
+                      </div>
+                      {/* <Separator /> */}
+                    </CardContent>
+                    <CardFooter
+                      className={
+                        isPreServiceEvent
+                          ? "flex w-full flex-col gap-4"
+                          : undefined
+                      }
+                    >
+                      {session.availabilityStatus === "available" ? (
+                        isPreServiceEvent ? (
+                          <>
+                            <div className="w-full">
+                              <Label className="text-sm uppercase text-gray-800">
+                                Pilih Tim IR
+                              </Label>
+                              <Select
+                                value={currentIrValue}
+                                onValueChange={(value) =>
+                                  setSelectedIrBySession((prev) => ({
+                                    ...prev,
+                                    [session.code]: value,
+                                  }))
+                                }
+                              >
+                                <SelectTrigger className="mt-2 h-auto items-start rounded-lg border-gray-300 bg-white py-3">
+                                  <div className="flex flex-col text-left">
+                                    <span className="text-sm font-semibold text-gray-900">
+                                      {currentIrOption?.number}
+                                    </span>
+                                    <span className="text-xs text-gray-600">
+                                      {currentIrOption?.time} •{" "}
+                                      {currentIrOption?.location}
+                                    </span>
+                                    <span className="text-xs text-gray-600">
+                                      {currentIrOption?.team}
+                                    </span>
+                                  </div>
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {PRE_SERVICE_IR_OPTIONS.map((option) => (
+                                    <SelectItem
+                                      key={option.number}
+                                      value={option.number}
+                                      className="py-2"
+                                    >
+                                      <div className="flex flex-col text-left">
+                                        <span className="text-sm font-semibold text-gray-900">
+                                          {option.number}
+                                        </span>
+                                        <span className="text-xs text-gray-600">
+                                          {option.time}
+                                        </span>
+                                        <span className="text-xs text-gray-600">
+                                          {option.location}
+                                        </span>
+                                        <span className="text-xs text-gray-600">
+                                          {option.team}
+                                        </span>
+                                      </div>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <VerifyTicketDialog
+                              triggerLabel="Register Now!"
+                              eventName={details?.title ?? "Homebase"}
+                              eventCode={normalizedEventCode}
+                              sessionCode={session.code}
+                              sessionName={session.title}
+                              onlineEvent={true}
+                              irNumber={currentIrOption?.number}
+                            />
+                          </>
+                        ) : details?.allowedFor === "public" ? (
+                          <Button
+                            onClick={() =>
+                              handleRegistration(
+                                normalizedEventCode,
+                                session.code,
+                                session.maxPerTransaction
+                              )
+                            }
+                          >
+                            Register Now!
+                          </Button>
+                        ) : details?.allowedFor === "private" ? (
+                          <Button onClick={() => handlePrivateRegistration()}>
+                            Register for Event
+                          </Button>
+                        ) : (
+                          <Button disabled>Invalid Event Type</Button>
+                        )
                       ) : (
-                        <Button disabled>Invalid Event Type</Button>
-                      )
-                    ) : (
-                      <Button disabled>Registration Closed</Button>
-                    )}
-                  </CardFooter>
-                </div>
-              </Card>
-            ))
+                        <Button disabled>Registration Closed</Button>
+                      )}
+                    </CardFooter>
+                  </div>
+                </Card>
+              );
+            })
         )}
       </main>
     </>
