@@ -256,7 +256,7 @@ const EventSessions = () => {
                           <>
                             <div className="w-full">
                               <Label className="text-sm uppercase text-gray-800">
-                                Pilih Tim IR
+                                Pilih Waktu Preservice
                               </Label>
                               <Select
                                 value={currentIrValue}
@@ -270,7 +270,7 @@ const EventSessions = () => {
                                 <SelectTrigger className="mt-2 h-auto items-start rounded-lg border-gray-300 bg-white py-3">
                                   <div className="flex flex-col text-left">
                                     <span className="text-sm font-semibold text-gray-900">
-                                      {currentIrOption?.number}
+                                      Preservice {currentIrOption?.number}
                                     </span>
                                     <span className="text-xs text-gray-600">
                                       {currentIrOption?.time} •{" "}
