@@ -297,7 +297,7 @@ const EventSessions = () => {
                                         Pilih Preservice IR
                                       </span>
                                       <span className="text-base">
-                                        Pilih slot IR sebelum registrasi
+                                        Pilih slot sebelum registrasi
                                       </span>
                                     </div>
                                   )}
