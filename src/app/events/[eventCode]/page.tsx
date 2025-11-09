@@ -168,7 +168,7 @@ const EventSessions = () => {
   }
 
   const getSelectedIrValue = (sessionCode: string) =>
-    selectedIrBySession[sessionCode] ?? PRE_SERVICE_IR_OPTIONS[0].number;
+    selectedIrBySession[sessionCode];
 
   return (
     <>
@@ -187,10 +187,9 @@ const EventSessions = () => {
             .filter((session) => session.availabilityStatus !== "unavailable")
             .map((session) => {
               const currentIrValue = getSelectedIrValue(session.code);
-              const currentIrOption =
-                PRE_SERVICE_IR_OPTIONS.find(
-                  (option) => option.number === currentIrValue
-                ) ?? PRE_SERVICE_IR_OPTIONS[0];
+              const currentIrOption = PRE_SERVICE_IR_OPTIONS.find(
+                (option) => option.number === currentIrValue
+              );
 
               return (
                 <Card
@@ -257,19 +256,17 @@ const EventSessions = () => {
                             <div className="w-full">
                               <Label className="text-lg uppercase text-gray-800">
                                 <span className="font-extrabold">
-                                  Pilih Waktu
+                                  Pilih Waktu Preservice
                                 </span>{" "}
-                                Preservice
                               </Label>
                               <br />
-                              <Label className="text-lg uppercase text-gray-800">
+                              <Label className="text-base  text-gray-800">
                                 <span className="font-extrabold">
-                                  Pilih Waktu
-                                </span>{" "}
-                                Preservice
+                                  Tap / ketuk pilihan preservice anda dibawah
+                                </span>
                               </Label>
                               <Select
-                                value={currentIrValue}
+                                value={currentIrValue ?? undefined}
                                 onValueChange={(value) =>
                                   setSelectedIrBySession((prev) => ({
                                     ...prev,
@@ -281,18 +278,29 @@ const EventSessions = () => {
                                   chevronSize={30}
                                   className="my-8 h-auto items-start rounded-lg border-gray-900 bg-white py-6"
                                 >
-                                  <div className="flex flex-col text-left">
-                                    <span className="text-lg font-semibold text-gray-900">
-                                      Preservice {currentIrOption?.number}
-                                    </span>
-                                    <span className="text-base text-gray-600">
-                                      {currentIrOption?.time} •{" "}
-                                      {currentIrOption?.location}
-                                    </span>
-                                    <span className="text-base text-gray-600">
-                                      {currentIrOption?.team}
-                                    </span>
-                                  </div>
+                                  {currentIrOption ? (
+                                    <div className="flex flex-col text-left">
+                                      <span className="text-lg font-semibold text-gray-900">
+                                        Preservice {currentIrOption.number}
+                                      </span>
+                                      <span className="text-base text-gray-600">
+                                        {currentIrOption.time} •{" "}
+                                        {currentIrOption.location}
+                                      </span>
+                                      <span className="text-base text-gray-600">
+                                        {currentIrOption.team}
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    <div className="flex flex-col text-left text-gray-700">
+                                      <span className="text-lg font-semibold">
+                                        Pilih Preservice IR
+                                      </span>
+                                      <span className="text-base">
+                                        Pilih slot IR sebelum registrasi
+                                      </span>
+                                    </div>
+                                  )}
                                 </SelectTrigger>
                                 <SelectContent>
                                   {PRE_SERVICE_IR_OPTIONS.map((option) => (
@@ -328,6 +336,7 @@ const EventSessions = () => {
                               sessionName={session.title}
                               onlineEvent={true}
                               irNumber={currentIrOption?.number}
+                              disabled={!currentIrOption}
                             />
                           </>
                         ) : details?.allowedFor === "public" ? (
