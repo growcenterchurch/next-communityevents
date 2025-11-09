@@ -220,8 +220,8 @@ const EventSessions = () => {
                         {session.description}
                       </p>
                       <Separator />
-                      <div className="mt-2 pt-4">
-                        <p className="font-semibold text-gray-700">
+                      {/* <div className="mt-2 pt-4">
+                        <p className="font-semibold text-lg text-gray-700">
                           Event Time:
                         </p>
                         <p className="text-sm text-gray-500 my-3">
@@ -229,7 +229,7 @@ const EventSessions = () => {
                             {formatDate(new Date(session.instanceStartAt))}
                           </span>
                         </p>
-                      </div>
+                      </div> */}
 
                       <Separator />
                       <div className="mt-2 pt-4">
@@ -255,8 +255,18 @@ const EventSessions = () => {
                         isPreServiceEvent ? (
                           <>
                             <div className="w-full">
-                              <Label className="text-sm uppercase text-gray-800">
-                                Pilih Waktu Preservice
+                              <Label className="text-lg uppercase text-gray-800">
+                                <span className="font-extrabold">
+                                  Pilih Waktu
+                                </span>{" "}
+                                Preservice
+                              </Label>
+                              <br />
+                              <Label className="text-lg uppercase text-gray-800">
+                                <span className="font-extrabold">
+                                  Pilih Waktu
+                                </span>{" "}
+                                Preservice
                               </Label>
                               <Select
                                 value={currentIrValue}
@@ -267,16 +277,19 @@ const EventSessions = () => {
                                   }))
                                 }
                               >
-                                <SelectTrigger className="mt-2 h-auto items-start rounded-lg border-gray-300 bg-white py-3">
+                                <SelectTrigger
+                                  chevronSize={30}
+                                  className="my-8 h-auto items-start rounded-lg border-gray-900 bg-white py-6"
+                                >
                                   <div className="flex flex-col text-left">
-                                    <span className="text-sm font-semibold text-gray-900">
+                                    <span className="text-lg font-semibold text-gray-900">
                                       Preservice {currentIrOption?.number}
                                     </span>
-                                    <span className="text-xs text-gray-600">
+                                    <span className="text-base text-gray-600">
                                       {currentIrOption?.time} •{" "}
                                       {currentIrOption?.location}
                                     </span>
-                                    <span className="text-xs text-gray-600">
+                                    <span className="text-base text-gray-600">
                                       {currentIrOption?.team}
                                     </span>
                                   </div>
@@ -289,16 +302,16 @@ const EventSessions = () => {
                                       className="py-2"
                                     >
                                       <div className="flex flex-col text-left">
-                                        <span className="text-sm font-semibold text-gray-900">
+                                        <span className="text-base font-semibold text-gray-900">
                                           Preservice {option.number}
                                         </span>
-                                        <span className="text-xs text-gray-600">
+                                        <span className="text-base text-gray-600">
                                           {option.time}
                                         </span>
-                                        <span className="text-xs text-gray-600">
+                                        <span className="text-base text-gray-600">
                                           {option.location}
                                         </span>
-                                        <span className="text-xs text-gray-600">
+                                        <span className="text-base text-gray-600">
                                           {option.team}
                                         </span>
                                       </div>

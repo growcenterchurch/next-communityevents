@@ -20,6 +20,7 @@ const VerifyTicketDialog = ({
   onlineEvent = false,
   triggerLabel = "QR Scanner (Camera)",
   irNumber,
+  disabled = false,
 }: {
   eventCode: string;
   eventName: string;
@@ -28,12 +29,15 @@ const VerifyTicketDialog = ({
   onlineEvent?: boolean;
   triggerLabel?: string;
   irNumber?: string;
+  disabled?: boolean;
 }) => {
   return (
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="w-FIT h-10">{triggerLabel}</Button>
+          <Button className="w-FIT h-10" disabled={disabled}>
+            {triggerLabel}
+          </Button>
         </DialogTrigger>
         <DialogContent className="w-full max-w-lg md:max-w-xl mx-auto my-auto flex flex-col justify-center items-center">
           <DialogHeader>
