@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { UserNotRegisteredDialog } from "@/components/UserNotRegisteredDialog";
 import { useToast } from "@/components/ui/use-toast";
 import SnowfallComponent from "@/components/SnowfallComponent";
+import LogoCarousel from "@/components/LogoCarousel";
 
 const LoginV2 = () => {
   const { login } = useAuth();
@@ -197,6 +198,7 @@ const LoginV2 = () => {
                 />
               </CardContent>
             </Card>
+            <LogoCarousel />
           </div>
         </div>
       </div>
