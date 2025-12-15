@@ -127,9 +127,27 @@ const EventRegistration = () => {
       const targetEvent = data?.data?.find(
         (event: any) => event.code === eventCode
       );
+
+      if (!targetEvent) {
+        setAvailableSlots(4);
+        if (numberOfRegistrants > 4) {
+          setNumberOfRegistrants(4);
+        }
+        return;
+      }
+
       const targetInstance = (targetEvent?.instances ?? []).find(
         (instance: any) => instance.code === sessionCode
       );
+
+      if (!targetInstance) {
+        setAvailableSlots(4);
+        if (numberOfRegistrants > 4) {
+          setNumberOfRegistrants(4);
+        }
+        return;
+      }
+
       const existingRegistrations = (targetInstance?.registrants ?? []).filter(
         (registrant: any) => registrant.registrationStatus !== "cancelled"
       ).length;

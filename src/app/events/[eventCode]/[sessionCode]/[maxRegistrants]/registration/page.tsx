@@ -79,9 +79,25 @@ const EventRegistration = () => {
         (event: any) => event.code === eventCode
       );
 
+      if (!targetEvent) {
+        setAvailableSlots(maxSelectableRegistrants);
+        if (numberOfRegistrants > maxSelectableRegistrants) {
+          setNumberOfRegistrants(maxSelectableRegistrants);
+        }
+        return;
+      }
+
       const targetInstance = (targetEvent.instances ?? []).find(
         (instance: any) => instance.code === sessionCode
       );
+
+      if (!targetInstance) {
+        setAvailableSlots(maxSelectableRegistrants);
+        if (numberOfRegistrants > maxSelectableRegistrants) {
+          setNumberOfRegistrants(maxSelectableRegistrants);
+        }
+        return;
+      }
 
       const totalRegistrants = (targetInstance.registrants ?? []).filter(
         (registrant: any) => registrant.registrationStatus !== "cancelled"
