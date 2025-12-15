@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import withAuth from "@/components/providers/AuthWrapper";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { formatDate } from "@/lib/utils";
+import { formatDate, hasType } from "@/lib/utils";
 
 const EventsPage = () => {
   const [events, setEvents] = useState<any[]>([]); // State to hold fetched events
@@ -32,6 +32,9 @@ const EventsPage = () => {
   const router = useRouter();
   const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
     useAuth();
+  const userData = isAuthenticated
+    ? JSON.parse(localStorage.getItem("userData") || "{}")
+    : null;
 
   // Fetch events on component mount
   useEffect(() => {
@@ -101,7 +104,13 @@ const EventsPage = () => {
             </p>
           ) : events && events.length > 0 ? (
             events
-              .filter((event) => event.availabilityStatus !== "unavailable")
+              .filter(
+                (event) =>
+                  event.availabilityStatus !== "unavailable" &&
+                  (hasType(userData, "admin") ||
+                    hasType(userData, "volunteer") ||
+                    hasType(userData, "usher"))
+              )
               .map((event) => (
                 <Card key={event.code} className="rounded-xl mb-4">
                   <div className="flex flex-col md:flex-row">
