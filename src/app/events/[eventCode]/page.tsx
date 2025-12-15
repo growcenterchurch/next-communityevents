@@ -229,7 +229,8 @@ const EventSessions = () => {
                         </p>
                         <p className="text-sm text-gray-500 my-3">
                           <span className="font-medium text-gray-700">
-                            {formatDate(new Date(session.instanceStartAt))}
+                            {formatDate(new Date(session.instanceStartAt))} -{" "}
+                            {formatDate(new Date(session.instanceEndAt))}
                           </span>
                         </p>
                       </div>
