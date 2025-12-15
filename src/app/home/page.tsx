@@ -31,6 +31,7 @@ import {
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Announcement from "@/components/Announcement";
+import SnowfallComponent from "@/components/SnowfallComponent";
 
 const Home = () => {
   const router = useRouter();
@@ -135,6 +136,7 @@ const Home = () => {
 
   return (
     <>
+      <SnowfallComponent />
       <main className="h-max min-w-full overflow-auto">
         {/* Header */}
         <div className="flex flex-row border bg-primary border-x-primary border-t-primary border-b-black/20 p-2 justify-between items-center">

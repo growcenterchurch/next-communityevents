@@ -43,6 +43,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
     "react-phone-number-input": "^3.4.5",
+    "react-snowfall": "^2.4.0",
     "swr": "^2.3.4",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",

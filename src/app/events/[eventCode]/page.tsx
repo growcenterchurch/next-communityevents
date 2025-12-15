@@ -26,6 +26,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import SnowfallComponent from "@/components/SnowfallComponent";
 
 interface EventDetails {
   type: string;
@@ -172,6 +173,7 @@ const EventSessions = () => {
 
   return (
     <>
+      <SnowfallComponent />
       <HeaderNav name="Event Sessions" link="events" />
       <main>
         {/* Loading and Error States */}
@@ -339,7 +341,9 @@ const EventSessions = () => {
                               disabled={!currentIrOption}
                             />
                           </>
-                        ) : details?.allowedFor === "public" ? (
+                        ) : details?.allowedFor === "private" &&
+                          (eventCode === "d49f0c5" ||
+                            eventCode === "b5a30e1") ? (
                           <Button
                             onClick={() =>
                               handleRegistration(
