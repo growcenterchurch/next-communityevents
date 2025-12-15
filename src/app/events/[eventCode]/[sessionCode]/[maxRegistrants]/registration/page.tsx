@@ -46,7 +46,7 @@ const EventRegistration = () => {
     }
   };
 
-  const fetchExistingEventRegistrations = async (
+  const fetchExistingInstanceRegistrations = async (
     token: string
   ): Promise<number | null> => {
     try {
@@ -72,15 +72,17 @@ const EventRegistration = () => {
         return 0;
       }
 
-      const totalRegistrants = (targetEvent.instances ?? []).reduce(
-        (count: number, instance: any) =>
-          count +
-          (instance.registrants ?? []).filter(
-            (registrant: any) => registrant.registrationStatus !== "cancelled"
-          ).length,
-        0
+      const targetInstance = (targetEvent.instances ?? []).find(
+        (instance: any) => instance.code === sessionCode
       );
-      console.log(totalRegistrants.length);
+
+      if (!targetInstance) {
+        return 0;
+      }
+
+      const totalRegistrants = (targetInstance.registrants ?? []).filter(
+        (registrant: any) => registrant.registrationStatus !== "cancelled"
+      ).length;
 
       return totalRegistrants;
     } catch (error) {
@@ -149,7 +151,7 @@ const EventRegistration = () => {
       return;
     }
 
-    const existingRegistrations = await fetchExistingEventRegistrations(
+    const existingRegistrations = await fetchExistingInstanceRegistrations(
       accessToken
     );
     if (existingRegistrations === null) {
@@ -161,7 +163,7 @@ const EventRegistration = () => {
       toast({
         title: "Registration Limit Reached",
         description:
-          "You can only register up to 4 tickets for this event across all sessions.",
+          "You can only register up to 4 tickets for this instance.",
         className: "bg-red-400",
         duration: 2500,
       });

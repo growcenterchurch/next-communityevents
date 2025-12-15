@@ -113,20 +113,18 @@ const EventRegistration = () => {
       const targetEvent = existingRegistrationsData?.data?.find(
         (event: any) => event.code === eventCode
       );
-      const existingRegistrations = (targetEvent?.instances ?? []).reduce(
-        (count: number, instance: any) =>
-          count +
-          (instance.registrants ?? []).filter(
-            (registrant: any) => registrant.registrationStatus !== "cancelled"
-          ).length,
-        0
+      const targetInstance = (targetEvent?.instances ?? []).find(
+        (instance: any) => instance.code === sessionCode
       );
+      const existingRegistrations = (targetInstance?.registrants ?? []).filter(
+        (registrant: any) => registrant.registrationStatus !== "cancelled"
+      ).length;
 
       if (existingRegistrations + registrantData.length > 4) {
         toast({
           title: "Registration Limit Reached",
           description:
-            "You can only register up to 4 tickets for this event across all sessions.",
+            "You can only register up to 4 tickets for this instance.",
           className: "bg-red-400",
           duration: 2500,
         });
