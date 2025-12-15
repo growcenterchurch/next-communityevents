@@ -20,6 +20,7 @@ import withAuth from "@/components/providers/AuthWrapper";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 import VerifyTicketDialog from "@/components/VerifyTicketDialog";
+import ReactMarkdown from "react-markdown";
 import {
   Select,
   SelectContent,
@@ -188,6 +189,11 @@ const EventSessions = () => {
           // Display fetched sessions
           sessions
             .filter((session) => session.availabilityStatus !== "unavailable")
+            .sort((a, b) =>
+              (a.title ?? "").localeCompare(b.title ?? "", undefined, {
+                numeric: true,
+              })
+            )
             .map((session) => {
               const currentIrValue = getSelectedIrValue(session.code);
               const currentIrOption = PRE_SERVICE_IR_OPTIONS.find(
@@ -202,8 +208,6 @@ const EventSessions = () => {
                   <div className="flex flex-col">
                     <CardHeader>
                       <CardTitle>{session.title}</CardTitle>{" "}
-                      <CardDescription>{session.description}</CardDescription>
-                      {/* Session Title */}
                     </CardHeader>
                     <CardContent className="flex flex-col">
                       <Badge
@@ -219,9 +223,10 @@ const EventSessions = () => {
                           {session.availabilityStatus}
                         </span>
                       </Badge>
-                      <p className="text-base font-light my-2 pb-2">
-                        {session.description}
-                      </p>
+                      <div className="text-sm">
+                        {" "}
+                        <ReactMarkdown>{session.description}</ReactMarkdown>
+                      </div>
                       <Separator />
                       <div className="mt-2 pt-4">
                         <p className="font-semibold text-lg text-gray-700">
