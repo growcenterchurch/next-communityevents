@@ -35,11 +35,64 @@ const EventRegistration = () => {
   const router = useRouter();
   const { toast } = useToast();
 
+  const parsedMaxRegistrants = parseInt(maxRegistrants as string);
+  const maxSelectableRegistrants = Number.isNaN(parsedMaxRegistrants)
+    ? 4
+    : Math.min(4, parsedMaxRegistrants); // temporary cap at 4 even if backend allows more
+
   const incrementRegistrants = () => {
-    if (numberOfRegistrants <= 3) {
-      if (numberOfRegistrants < parseInt(maxRegistrants as string)) {
-        setNumberOfRegistrants((prev) => prev + 1);
+    if (numberOfRegistrants < maxSelectableRegistrants) {
+      setNumberOfRegistrants((prev) => prev + 1);
+    }
+  };
+
+  const fetchExistingEventRegistrations = async (
+    token: string
+  ): Promise<number | null> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v2/events/registers`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "X-API-Key": API_KEY,
+        },
+      });
+
+      if (response.status === 401) {
+        handleExpiredToken();
+        return null;
       }
+
+      const data = await response.json();
+      const targetEvent = data?.data?.find(
+        (event: any) => event.code === eventCode
+      );
+
+      if (!targetEvent) {
+        return 0;
+      }
+
+      const totalRegistrants = (targetEvent.instances ?? []).reduce(
+        (count: number, instance: any) =>
+          count +
+          (instance.registrants ?? []).filter(
+            (registrant: any) => registrant.registrationStatus !== "cancelled"
+          ).length,
+        0
+      );
+      console.log(totalRegistrants.length);
+
+      return totalRegistrants;
+    } catch (error) {
+      console.error("Failed to fetch event registration count:", error);
+      toast({
+        title: "Registration Failed!",
+        description:
+          "Could not verify existing registrations. Please try again.",
+        className: "bg-red-400",
+        duration: 2000,
+      });
+      return null;
     }
   };
 
@@ -92,6 +145,27 @@ const EventRegistration = () => {
     const accessToken = await getValidAccessToken();
     if (!accessToken) {
       handleExpiredToken();
+      setIsSubmitting(false);
+      return;
+    }
+
+    const existingRegistrations = await fetchExistingEventRegistrations(
+      accessToken
+    );
+    if (existingRegistrations === null) {
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (existingRegistrations + registrantData.length > 4) {
+      toast({
+        title: "Registration Limit Reached",
+        description:
+          "You can only register up to 4 tickets for this event across all sessions.",
+        className: "bg-red-400",
+        duration: 2500,
+      });
+      setIsSubmitting(false);
       return;
     }
 

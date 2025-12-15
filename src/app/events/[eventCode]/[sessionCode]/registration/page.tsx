@@ -86,6 +86,63 @@ const EventRegistration = () => {
     const accessToken = await getValidAccessToken();
     if (!accessToken) {
       handleExpiredToken();
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const existingRegistrationsResponse = await fetch(
+        `${API_BASE_URL}/api/v2/events/registers`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+            "X-API-Key": API_KEY,
+          },
+        }
+      );
+
+      if (existingRegistrationsResponse.status === 401) {
+        handleExpiredToken();
+        setIsSubmitting(false);
+        return;
+      }
+
+      const existingRegistrationsData =
+        await existingRegistrationsResponse.json();
+      const targetEvent = existingRegistrationsData?.data?.find(
+        (event: any) => event.code === eventCode
+      );
+      const existingRegistrations = (targetEvent?.instances ?? []).reduce(
+        (count: number, instance: any) =>
+          count +
+          (instance.registrants ?? []).filter(
+            (registrant: any) => registrant.registrationStatus !== "cancelled"
+          ).length,
+        0
+      );
+
+      if (existingRegistrations + registrantData.length > 4) {
+        toast({
+          title: "Registration Limit Reached",
+          description:
+            "You can only register up to 4 tickets for this event across all sessions.",
+          className: "bg-red-400",
+          duration: 2500,
+        });
+        setIsSubmitting(false);
+        return;
+      }
+    } catch (error) {
+      console.error("Failed to fetch event registration count:", error);
+      toast({
+        title: "Registration Failed!",
+        description:
+          "Could not verify existing registrations. Please try again.",
+        className: "bg-red-400",
+        duration: 2000,
+      });
+      setIsSubmitting(false);
       return;
     }
 
