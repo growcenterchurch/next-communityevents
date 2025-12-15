@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import SnowfallComponent from "@/components/SnowfallComponent";
 import {
   Card,
   CardContent,
@@ -81,6 +82,8 @@ const EventsPage = () => {
   return (
     <>
       <HeaderNav name="Events" link="home"></HeaderNav>
+      <SnowfallComponent />
+
       <main>
         <div className="my-4 mx-2 flex relative flex-1 md:grow-0">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />

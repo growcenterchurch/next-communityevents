@@ -18,6 +18,7 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import withAuth from "@/components/providers/AuthWrapper";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import SnowfallComponent from "@/components/SnowfallComponent";
 
 const EventRegistration = () => {
   const { eventCode, sessionCode, maxRegistrants } = useParams();
@@ -53,7 +54,10 @@ const EventRegistration = () => {
     const newRegistrantData = Array.from(
       { length: numberOfRegistrants },
       (_, index) => ({
-        name: registrantData[index]?.name || "",
+        // Prefill first registrant with user name
+        name:
+          registrantData[index]?.name ??
+          (index === 0 ? userData?.name ?? "" : ""),
       })
     );
     setRegistrantData(newRegistrantData);
@@ -95,7 +99,7 @@ const EventRegistration = () => {
       communityId: userData.communityId,
       eventCode: eventCode,
       instanceCode: sessionCode,
-      identifier: identifier.trim(),
+      // identifier: identifier.trim(),
       isPersonalQR: false,
       name: registrantData[0]?.name.trim(),
       registerAt: new Date().toISOString(),
@@ -161,6 +165,7 @@ const EventRegistration = () => {
   return (
     <>
       <HeaderNav name="Register" link={`events/${eventCode}`} />
+      <SnowfallComponent />
       <main className="my-4">
         {!confirmed && (
           <div className="flex flex-col items-center space-y-10">
@@ -196,7 +201,7 @@ const EventRegistration = () => {
         {confirmed && (
           <>
             <form onSubmit={handleSubmit} className="m-4">
-              <Card className="my-4 relative md:w-5/12 md:mx-auto">
+              {/* <Card className="my-4 relative md:w-5/12 md:mx-auto">
                 <CardHeader>
                   <CardTitle>Identifier</CardTitle>
                   <CardDescription>
@@ -219,7 +224,7 @@ const EventRegistration = () => {
                   </div>
                 </CardContent>
                 <CardFooter></CardFooter>
-              </Card>
+              </Card> */}
 
               {registrantData.map((registrant, index) => (
                 <Card
@@ -257,6 +262,7 @@ const EventRegistration = () => {
                           handleInputChange(index, "name", e.target.value)
                         }
                         required
+                        autoFocus={index === 0}
                       />
                     </div>
                   </CardContent>
