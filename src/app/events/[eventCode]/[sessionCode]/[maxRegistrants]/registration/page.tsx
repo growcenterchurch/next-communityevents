@@ -34,6 +34,7 @@ const EventRegistration = () => {
   const [identifier, setIdentifier] = useState<string>(userData.email); // New state for identifier
   const router = useRouter();
   const { toast } = useToast();
+  const [availableSlots, setAvailableSlots] = useState<number | null>(null);
 
   const parsedMaxRegistrants = parseInt(maxRegistrants as string);
   const maxSelectableRegistrants = Number.isNaN(parsedMaxRegistrants)
@@ -41,14 +42,24 @@ const EventRegistration = () => {
     : Math.min(4, parsedMaxRegistrants); // temporary cap at 4 even if backend allows more
 
   const incrementRegistrants = () => {
-    if (numberOfRegistrants < maxSelectableRegistrants) {
+    const maxAllowed =
+      availableSlots === null
+        ? maxSelectableRegistrants
+        : Math.min(maxSelectableRegistrants, availableSlots);
+    if (maxAllowed <= 0) {
+      return;
+    }
+    if (numberOfRegistrants < maxAllowed) {
       setNumberOfRegistrants((prev) => prev + 1);
     }
   };
 
-  const fetchExistingInstanceRegistrations = async (
-    token: string
-  ): Promise<number | null> => {
+  const fetchExistingInstanceRegistrations = async (): Promise<void> => {
+    const token = await getValidAccessToken();
+    if (!token) {
+      handleExpiredToken();
+      return;
+    }
     try {
       const response = await fetch(`${API_BASE_URL}/api/v2/events/registers`, {
         headers: {
@@ -60,7 +71,7 @@ const EventRegistration = () => {
 
       if (response.status === 401) {
         handleExpiredToken();
-        return null;
+        return;
       }
 
       const data = await response.json();
@@ -68,23 +79,28 @@ const EventRegistration = () => {
         (event: any) => event.code === eventCode
       );
 
-      if (!targetEvent) {
-        return 0;
-      }
-
       const targetInstance = (targetEvent.instances ?? []).find(
         (instance: any) => instance.code === sessionCode
       );
-
-      if (!targetInstance) {
-        return 0;
-      }
 
       const totalRegistrants = (targetInstance.registrants ?? []).filter(
         (registrant: any) => registrant.registrationStatus !== "cancelled"
       ).length;
 
-      return totalRegistrants;
+      const remaining = Math.max(0, 4 - totalRegistrants);
+      setAvailableSlots(Math.min(maxSelectableRegistrants, remaining));
+      if (remaining <= 0) {
+        toast({
+          title: "Registration Failed!",
+          description:
+            "You have registered for more than 4 times in this instance.",
+          className: "bg-red-400",
+          duration: 2000,
+        });
+        router.push("/events");
+      } else if (numberOfRegistrants > remaining) {
+        setNumberOfRegistrants(remaining);
+      }
     } catch (error) {
       console.error("Failed to fetch event registration count:", error);
       toast({
@@ -94,9 +110,14 @@ const EventRegistration = () => {
         className: "bg-red-400",
         duration: 2000,
       });
-      return null;
     }
   };
+
+  React.useEffect(() => {
+    fetchExistingInstanceRegistrations();
+    // We intentionally do not add dependencies to avoid refetch loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const decrementRegistrants = () => {
     if (numberOfRegistrants > 1) {
@@ -105,6 +126,26 @@ const EventRegistration = () => {
   };
 
   const handleConfirm = () => {
+    if (availableSlots !== null && availableSlots <= 0) {
+      toast({
+        title: "Registration Limit Reached",
+        description: "No slots remaining for this instance.",
+        className: "bg-red-400",
+        duration: 2500,
+      });
+      return;
+    }
+
+    if (numberOfRegistrants < 1) {
+      toast({
+        title: "Registration Limit Reached",
+        description: "No slots remaining for this instance.",
+        className: "bg-red-400",
+        duration: 2500,
+      });
+      return;
+    }
+
     setConfirmed(true);
     const newRegistrantData = Array.from(
       { length: numberOfRegistrants },
@@ -151,19 +192,15 @@ const EventRegistration = () => {
       return;
     }
 
-    const existingRegistrations = await fetchExistingInstanceRegistrations(
-      accessToken
-    );
-    if (existingRegistrations === null) {
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (existingRegistrations + registrantData.length > 4) {
+    if (
+      availableSlots !== null &&
+      (availableSlots <= 0 ||
+        registrantData.length > availableSlots ||
+        numberOfRegistrants < 1)
+    ) {
       toast({
         title: "Registration Limit Reached",
-        description:
-          "You can only register up to 4 tickets for this instance.",
+        description: "No slots remaining for this instance.",
         className: "bg-red-400",
         duration: 2500,
       });
