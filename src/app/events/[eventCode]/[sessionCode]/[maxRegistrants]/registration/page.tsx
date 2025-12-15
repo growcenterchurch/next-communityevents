@@ -96,10 +96,10 @@ const EventRegistration = () => {
     }
 
     const payload = {
-      communityId: userData.communityId,
+      // communityId: userData.communityId,
       eventCode: eventCode,
       instanceCode: sessionCode,
-      // identifier: identifier.trim(),
+      identifier: identifier.trim(),
       isPersonalQR: false,
       name: registrantData[0]?.name.trim(),
       registerAt: new Date().toISOString(),
@@ -201,7 +201,7 @@ const EventRegistration = () => {
         {confirmed && (
           <>
             <form onSubmit={handleSubmit} className="m-4">
-              {/* <Card className="my-4 relative md:w-5/12 md:mx-auto">
+              <Card className="my-4 relative md:w-5/12 md:mx-auto">
                 <CardHeader>
                   <CardTitle>Identifier</CardTitle>
                   <CardDescription>
@@ -224,7 +224,7 @@ const EventRegistration = () => {
                   </div>
                 </CardContent>
                 <CardFooter></CardFooter>
-              </Card> */}
+              </Card>
 
               {registrantData.map((registrant, index) => (
                 <Card

@@ -341,7 +341,7 @@ const EventSessions = () => {
                               disabled={!currentIrOption}
                             />
                           </>
-                        ) : details?.allowedFor === "private" &&
+                        ) : details?.allowedFor === "public" &&
                           (eventCode === "d49f0c5" ||
                             eventCode === "b5a30e1") ? (
                           <Button
