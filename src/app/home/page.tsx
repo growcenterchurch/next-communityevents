@@ -142,7 +142,7 @@ const Home = () => {
         <div className="flex flex-row border bg-primary border-x-primary border-t-primary border-b-black/20 p-2 justify-between items-center">
           <Image
             className=""
-            src="/images/gc-logo.jpg" // Adjust the path to your logo in the public folder
+            src="/images/gc-logo-christmas.png" // Adjust the path to your logo in the public folder
             alt="Logo"
             width={60} // Adjust the width of the logo
             height={60} // Adjust the height of the logo
