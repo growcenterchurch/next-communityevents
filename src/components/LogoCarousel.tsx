@@ -10,6 +10,7 @@ const logos = [
   { src: "/logos/tulus.png", alt: "Logo Tulus 2" },
   { src: "/logos/upper-room.png", alt: "Logo Upper Room" },
   { src: "/logos/bijimata.png", alt: "Logo Biji Mata" },
+  { src: "/logos/artolite.png", alt: "Logo Artolite" },
 
   // Add more logos here
 ];
