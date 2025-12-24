@@ -189,7 +189,7 @@ function QrCodeScanner({
       <Scanner
         scanDelay={5000}
         allowMultiple={true}
-        onScan={handleScan}
+        onScan={handleScanPublic}
         paused={loading || dialogOpen} // Pause scanning when the dialog is open
       />
 
