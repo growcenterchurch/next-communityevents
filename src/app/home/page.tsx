@@ -31,7 +31,7 @@ import {
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Announcement from "@/components/Announcement";
-import SnowfallComponent from "@/components/SnowfallComponent";
+// import SnowfallComponent from "@/components/SnowfallComponent";
 
 const Home = () => {
   const router = useRouter();
@@ -136,14 +136,14 @@ const Home = () => {
 
   return (
     <>
-      <SnowfallComponent />
+      {/* <SnowfallComponent /> */}
       <main className="h-max min-w-full overflow-auto">
         {/* Header */}
         <div className="relative flex flex-row border bg-primary border-x-primary border-t-primary border-b-black/20 p-2 justify-between items-center overflow-hidden">
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[6px] opacity-80 bg-[repeating-linear-gradient(135deg,#ef4444_0,#ef4444_12px,#ffffff_12px,#ffffff_24px,#10b981_24px,#10b981_36px)]" />
+          {/* <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[6px] opacity-80 bg-[repeating-linear-gradient(135deg,#ef4444_0,#ef4444_12px,#ffffff_12px,#ffffff_24px,#10b981_24px,#10b981_36px)]" /> */}
           <Image
             className="py-1"
-            src="/images/gc-logo-christmas.png" // Adjust the path to your logo in the public folder
+            src="/images/gc-logo.jpg" // Adjust the path to your logo in the public folder
             alt="Logo"
             width={60} // Adjust the width of the logo
             height={60} // Adjust the height of the logo

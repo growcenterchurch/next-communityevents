@@ -11,8 +11,8 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { UserNotRegisteredDialog } from "@/components/UserNotRegisteredDialog";
 import { useToast } from "@/components/ui/use-toast";
-import SnowfallComponent from "@/components/SnowfallComponent";
-import LogoCarousel from "@/components/LogoCarousel";
+// import SnowfallComponent from "@/components/SnowfallComponent";
+// import LogoCarousel from "@/components/LogoCarousel";
 
 const LoginV2 = () => {
   const { login } = useAuth();
@@ -109,7 +109,7 @@ const LoginV2 = () => {
 
   return (
     <>
-      <SnowfallComponent />
+      {/* <SnowfallComponent /> */}
       <div className="flex flex-row md:self-start bg-muted"></div>
       <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
         <div className="w-full max-w-sm md:max-w-3xl">
@@ -198,7 +198,7 @@ const LoginV2 = () => {
                 />
               </CardContent>
             </Card>
-            <LogoCarousel />
+            {/* <LogoCarousel /> */}
           </div>
         </div>
       </div>

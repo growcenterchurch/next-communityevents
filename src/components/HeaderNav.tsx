@@ -9,7 +9,7 @@ const HeaderNav = ({ name, link }: { name: string; link: string }) => {
   return (
     <>
       <header className="relative w-full flex items-center bg-primary p-4">
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[6px] opacity-80 bg-[repeating-linear-gradient(135deg,#ef4444_0,#ef4444_12px,#ffffff_12px,#ffffff_24px,#10b981_24px,#10b981_36px)]" />
+        {/* <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[6px] opacity-80 bg-[repeating-linear-gradient(135deg,#ef4444_0,#ef4444_12px,#ffffff_12px,#ffffff_24px,#10b981_24px,#10b981_36px)]" /> */}
 
         <div className="absolute left-1">
           <Link href={`/${link}`}>

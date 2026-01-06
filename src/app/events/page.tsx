@@ -85,7 +85,7 @@ const EventsPage = () => {
   return (
     <>
       <HeaderNav name="Events" link="home"></HeaderNav>
-      <SnowfallComponent />
+      {/* <SnowfallComponent /> */}
 
       <main>
         <div className="my-4 mx-2 flex relative flex-1 md:grow-0">
