@@ -201,7 +201,7 @@ function EventsAdmin() {
       setIsLoading(true); // Set loading to true before fetching
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/v2/events`, {
+        const response = await fetch(`${API_BASE_URL}/api/v2/internal/events`, {
           headers: {
             "X-API-KEY": API_KEY || "",
             "Content-Type": "application/json",
@@ -485,13 +485,13 @@ function EventsAdmin() {
                   <TableHeader>
                     <TableRow className="border-slate-200">
                       <TableHead className="text-slate-700">Title</TableHead>
-                      <TableHead className="text-slate-700">Status</TableHead>
+                      {/* <TableHead className="text-slate-700">Status</TableHead>
                       <TableHead className="hidden text-slate-700 sm:table-cell">
                         Topics
                       </TableHead>
                       <TableHead className="hidden text-slate-700 sm:table-cell">
                         Registration
-                      </TableHead>
+                      </TableHead> */}
                       <TableHead className="text-slate-700">Action</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -504,32 +504,30 @@ function EventsAdmin() {
                         <TableCell className="font-medium text-slate-900">
                           {event.title}
                         </TableCell>
-                        <TableCell>
+                        {/* <TableCell>
                           <Badge
                             variant="outline"
                             className="border-slate-200 bg-slate-50 text-slate-700"
                           >
                             {event.availabilityStatus}
                           </Badge>
-                        </TableCell>
-                        <TableCell className="hidden text-slate-700 sm:table-cell">
-                          {event.topics.join(", ")}
-                        </TableCell>
-                        <TableCell className="hidden text-slate-700 sm:table-cell">
+                        </TableCell> */}
+                        {/* <TableCell className="hidden text-slate-700 sm:table-cell">
+                            {event.topics.join(", ")}
+                          </TableCell> */}
+                        {/* <TableCell className="hidden text-slate-700 sm:table-cell">
                           {formatDate(event.registerStartAt)} -{" "}
                           {formatDate(event.registerEndAt)}
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell>
-                          {(event.availabilityStatus === "available" ||
-                            event.availabilityStatus === "soon" ||
-                            event.availabilityStatus === "closed") && (
+                          {
                             <Button
                               className="rounded-lg bg-blue-600 text-white shadow-md shadow-blue-200 transition hover:-translate-y-0.5 hover:bg-blue-500"
                               onClick={() => handleSession(event.code)}
                             >
                               View Details
                             </Button>
-                          )}
+                          }
                         </TableCell>
                       </TableRow>
                     ))}

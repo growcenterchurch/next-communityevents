@@ -56,6 +56,7 @@ type EventInstancePayload = {
   allowVerifyAt: string;
   title: string;
   totalSeats: number;
+  isUpdateEventTime: boolean;
 };
 
 const instanceSchema = z.object({
@@ -79,6 +80,7 @@ const instanceSchema = z.object({
   registerEndAt: z.string().min(1, "Registration end is required"),
   allowVerifyAt: z.string().min(1, "Allow verify time is required"),
   disallowVerifyAt: z.string().min(1, "Disallow verify time is required"),
+  isUpdateEventTime: z.boolean().default(true),
 });
 
 type InstanceFormValues = z.infer<typeof instanceSchema>;
@@ -128,6 +130,7 @@ export default function EventInstanceCreatePage() {
       registerEndAt: formatLocalInput(inNinety),
       allowVerifyAt: formatLocalInput(now),
       disallowVerifyAt: formatLocalInput(inNinety),
+      isUpdateEventTime: true,
     };
   }, []);
 
@@ -147,7 +150,7 @@ export default function EventInstanceCreatePage() {
           return;
         }
 
-        const response = await fetch(`${API_BASE_URL}/api/v2/events`, {
+        const response = await fetch(`${API_BASE_URL}/api/v2/internal/events`, {
           headers: {
             "Content-Type": "application/json",
             "X-API-Key": API_KEY || "",
@@ -250,10 +253,11 @@ export default function EventInstanceCreatePage() {
         registerFlow: values.registerFlow,
         locationName: values.locationName,
         locationType: values.locationType,
-        maxPerTransaction: Number(values.maxPerTransaction || 0),
-        totalSeats: Number(values.totalSeats || 0),
-        title: values.title,
-      };
+      maxPerTransaction: Number(values.maxPerTransaction || 0),
+      totalSeats: Number(values.totalSeats || 0),
+      title: values.title,
+      isUpdateEventTime: values.isUpdateEventTime ?? true,
+    };
 
       const response = await fetch(
         `${API_BASE_URL}/api/v2/internal/events/instances`,
@@ -649,11 +653,11 @@ export default function EventInstanceCreatePage() {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="disallowVerifyAt"
-                    render={({ field }) => (
-                      <FormItem>
+                <FormField
+                  control={form.control}
+                  name="disallowVerifyAt"
+                  render={({ field }) => (
+                    <FormItem>
                         <FormLabel>Disallow verify at</FormLabel>
                         <FormControl>
                           <Input type="datetime-local" {...field} />
@@ -663,6 +667,28 @@ export default function EventInstanceCreatePage() {
                     )}
                   />
                 </div>
+                <FormField
+                  control={form.control}
+                  name="isUpdateEventTime"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between rounded-lg border border-input p-3">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-base">
+                          Update event time
+                        </FormLabel>
+                        <p className="text-sm text-muted-foreground">
+                          Also update the parent event schedule with these times.
+                        </p>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </form>
             </Form>
           </CardContent>
