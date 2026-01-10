@@ -175,7 +175,7 @@ const EventSessions = () => {
 
   return (
     <>
-      <SnowfallComponent />
+      {/* <SnowfallComponent /> */}
       <HeaderNav name="Event Sessions" link="events" />
       <main>
         {/* Loading and Error States */}
