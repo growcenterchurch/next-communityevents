@@ -67,6 +67,18 @@ const PRE_SERVICE_IR_OPTIONS = [
     team: "Tim IR 10.30",
   },
   {
+    number: "GROW Youth",
+    time: "Pk. 09.30 Pagi",
+    location: "GCX Room, PIOT 6 Lantai 6",
+    team: "Tim GROW Youth",
+  },
+  {
+    number: "GROW College",
+    time: "Pk. 11.30 Siang",
+    location: "GCX Room, PIOT 6 Lantai 6",
+    team: "Tim GROW College",
+  },
+  {
     number: "IR 3",
     time: "Pk. 11.00 Siang",
     location: "Ruang Fellowship IR, PIOT 6 Lantai 6",
@@ -83,18 +95,6 @@ const PRE_SERVICE_IR_OPTIONS = [
     time: "Pk. 16.30 Sore",
     location: "Ruang Fellowship IR, PIOT 6 Lantai 6",
     team: "Tim IR 18.00",
-  },
-  {
-    number: "GROW Youth",
-    time: "Pk. 09.30 Pagi",
-    location: "GCX Room, PIOT 6 Lantai 6",
-    team: "Tim GROW Youth",
-  },
-  {
-    number: "GROW College",
-    time: "Pk. 09.30 Pagi",
-    location: "GCX Room, PIOT 6 Lantai 6",
-    team: "Tim GROW College",
   },
 ] as const;
 
