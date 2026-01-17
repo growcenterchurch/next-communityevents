@@ -84,13 +84,25 @@ const PRE_SERVICE_IR_OPTIONS = [
     location: "Ruang Fellowship IR, PIOT 6 Lantai 6",
     team: "Tim IR 18.00",
   },
+  {
+    number: "GROW Youth",
+    time: "Pk. 09.30 Pagi",
+    location: "GCX Room, PIOT 6 Lantai 6",
+    team: "Tim GROW Youth",
+  },
+  {
+    number: "GROW College",
+    time: "Pk. 09.30 Pagi",
+    location: "GCX Room, PIOT 6 Lantai 6",
+    team: "Tim GROW College",
+  },
 ] as const;
 
 const EventSessions = () => {
   const { eventCode } = useParams(); // Retrieve eventCode from the route params
   const normalizedEventCode = Array.isArray(eventCode)
     ? eventCode[0]
-    : eventCode ?? "";
+    : (eventCode ?? "");
   const isPreServiceEvent = normalizedEventCode === "5f75ed1";
   const [sessions, setSessions] = useState<any[]>([]); // State to hold sessions
   const [details, setDetails] = useState<EventDetails | null>(null); // State to hold sessions
@@ -124,7 +136,7 @@ const EventSessions = () => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${accessToken}`,
             },
-          }
+          },
         );
 
         if (!response.ok) {
@@ -159,10 +171,10 @@ const EventSessions = () => {
   function handleRegistration(
     eventCode: string | string[],
     sessionCode: string,
-    maxRegistrants: number
+    maxRegistrants: number,
   ) {
     return router.push(
-      `/events/${eventCode}/${sessionCode}/${maxRegistrants}/registration`
+      `/events/${eventCode}/${sessionCode}/${maxRegistrants}/registration`,
     );
   }
 
@@ -192,12 +204,12 @@ const EventSessions = () => {
             .sort((a, b) =>
               (a.title ?? "").localeCompare(b.title ?? "", undefined, {
                 numeric: true,
-              })
+              }),
             )
             .map((session) => {
               const currentIrValue = getSelectedIrValue(session.code);
               const currentIrOption = PRE_SERVICE_IR_OPTIONS.find(
-                (option) => option.number === currentIrValue
+                (option) => option.number === currentIrValue,
               );
 
               return (
@@ -215,8 +227,8 @@ const EventSessions = () => {
                           session.availabilityStatus === "available"
                             ? "bg-green-700"
                             : session.availabilityStatus === "unavailable"
-                            ? "bg-red-500"
-                            : "bg-gray-400" // Default color for other statuses
+                              ? "bg-red-500"
+                              : "bg-gray-400" // Default color for other statuses
                         }`}
                       >
                         <span className="mx-auto">
@@ -357,7 +369,7 @@ const EventSessions = () => {
                               handleRegistration(
                                 normalizedEventCode,
                                 session.code,
-                                session.maxPerTransaction
+                                session.maxPerTransaction,
                               )
                             }
                           >
