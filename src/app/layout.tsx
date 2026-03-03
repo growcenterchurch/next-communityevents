@@ -4,6 +4,7 @@ import "./globals.css";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,6 +36,7 @@ export default function RootLayout({
           <Toaster />
           {children}
           <MobileBottomNav />
+          <Analytics />
         </body>
       </AuthProvider>
     </html>
