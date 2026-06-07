@@ -20,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search } from "lucide-react";
+import { Download, Loader2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Pagination,
@@ -81,6 +81,8 @@ interface Pagination {
   totalData: number;
 }
 
+type EventReportDownload = "csv" | "xlsx" | null;
+
 function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
   const router = useRouter();
   const [eventDetails, setEventDetails] = useState<EventDetails | null>(null);
@@ -91,6 +93,8 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const { handleExpiredToken, getValidAccessToken } = useAuth();
   const [selectedSession, setSelectedSession] = useState<string | null>(null);
+  const [reportDownload, setReportDownload] =
+    useState<EventReportDownload>(null);
   const { toast } = useToast();
 
   const fetchEventDetails = async () => {
@@ -252,6 +256,102 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
     }
   };
 
+  const getDownloadFilename = (
+    response: Response,
+    fallbackFilename: string,
+  ) => {
+    const contentDisposition = response.headers.get("content-disposition");
+    const filenameMatch = contentDisposition?.match(
+      /filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i,
+    );
+
+    return filenameMatch?.[1]
+      ? decodeURIComponent(filenameMatch[1])
+      : fallbackFilename;
+  };
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadEventReport = async (
+    format: Exclude<EventReportDownload, null>,
+  ) => {
+    if (!selectedSession) {
+      toast({
+        title: "Error",
+        description: "Please select an instance before downloading a report.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      router.push("/login/v2");
+      return;
+    }
+
+    const searchParams = new URLSearchParams({
+      format,
+      eventCode: params.eventCode,
+      instanceCode: selectedSession,
+    });
+
+    const fallbackFilename = `${params.eventCode}-${selectedSession}-registrations.${format}`;
+
+    setReportDownload(format);
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/v2/internal/events/registers/download?${searchParams.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "X-API-Key": API_KEY || "",
+          },
+        },
+      );
+
+      if (response.status === 401) {
+        handleExpiredToken();
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || "Failed to download report.");
+      }
+
+      const blob = await response.blob();
+      downloadBlob(blob, getDownloadFilename(response, fallbackFilename));
+
+      toast({
+        title: "Report downloaded",
+        description: `${eventDetails?.title ?? params.eventCode} registrations ${format.toUpperCase()} export is ready.`,
+      });
+    } catch (error) {
+      console.error("Error downloading event report:", error);
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while downloading the report.",
+        variant: "destructive",
+      });
+    } finally {
+      setReportDownload(null);
+    }
+  };
+
   const selectedSessionDetails = sessions.find(
     (session) => session.code === selectedSession
   );
@@ -396,6 +496,45 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
             )}
           </CardHeader>
           <CardContent>
+            <div className="mb-6 space-y-3 rounded-lg border bg-muted/20 p-4">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 className="text-base font-semibold">Event reports</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Download registrations for the selected instance.
+                  </p>
+                </div>
+                <div className="grid w-full gap-2 sm:w-auto sm:grid-cols-2">
+                  <Button
+                    type="button"
+                    onClick={() => downloadEventReport("csv")}
+                    disabled={reportDownload !== null}
+                    className="w-full sm:w-auto"
+                  >
+                    {reportDownload === "csv" ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Download className="h-4 w-4" />
+                    )}
+                    Export CSV
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => downloadEventReport("xlsx")}
+                    disabled={reportDownload !== null}
+                    className="w-full sm:w-auto"
+                  >
+                    {reportDownload === "xlsx" ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Download className="h-4 w-4" />
+                    )}
+                    Export XLSX
+                  </Button>
+                </div>
+              </div>
+            </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {sessions.map((session) => (
                 <button
