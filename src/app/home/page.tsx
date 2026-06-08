@@ -95,7 +95,7 @@ const Home = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
-        }
+        },
       );
 
       if (response.status === 401) {
@@ -108,9 +108,9 @@ const Home = () => {
       const registeredCount = data.data.flatMap((event: any) =>
         event.instances.flatMap((instance: any) =>
           instance.registrants.filter(
-            (registrant: any) => registrant.registrationStatus === "pending"
-          )
-        )
+            (registrant: any) => registrant.registrationStatus === "pending",
+          ),
+        ),
       ).length;
       setRegistrationsCount(registeredCount);
     } catch (error) {
