@@ -19,6 +19,7 @@ const MobileBottomNav = () => {
     "/profile",
     "/joincool",
     "/joincool/success",
+    "/event-creation",
   ];
   const shouldShowNav = !excludedRoutes.includes(pathname);
 
