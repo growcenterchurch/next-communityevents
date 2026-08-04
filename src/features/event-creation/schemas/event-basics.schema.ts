@@ -1,6 +1,15 @@
 import { z } from "zod";
 
 import { EVENT_CATEGORIES, EVENT_STATUSES } from "../constants";
+import {
+  eventLocationSchema,
+  eventNotificationSchema,
+  eventRecurrenceSchema,
+  eventScheduleSchema,
+} from "./location-schedule.schema";
+import { eventAccessSchema, organizerSchema } from "./organizer-access.schema";
+import { eventQuestionSchema } from "./question.schema";
+import { eventSessionSchema } from "./session.schema";
 
 const slugSchema = z
   .string()
@@ -64,14 +73,14 @@ export const eventBasicsSchema = z.object({
 
 export const createEventFormSchema = eventBasicsSchema
   .extend({
-    organizer: z.unknown(),
-    access: z.unknown(),
-    location: z.unknown(),
-    schedule: z.unknown(),
-    recurrence: z.unknown(),
-    notification: z.unknown(),
-    sessions: z.array(z.unknown()),
-    questions: z.array(z.unknown()),
+    organizer: organizerSchema,
+    access: eventAccessSchema,
+    location: eventLocationSchema,
+    schedule: eventScheduleSchema,
+    recurrence: eventRecurrenceSchema,
+    notification: eventNotificationSchema,
+    sessions: z.array(eventSessionSchema),
+    questions: z.array(eventQuestionSchema),
   })
   .superRefine((values, context) => {
     if (values.category === "announcement" && values.sessions.length > 0) {
@@ -79,6 +88,20 @@ export const createEventFormSchema = eventBasicsSchema
         code: z.ZodIssueCode.custom,
         path: ["sessions"],
         message: "Announcement events cannot contain sessions.",
+      });
+    }
+
+    if (values.status === "draft") {
+      values.sessions.forEach((session, sessionIndex) => {
+        if (session.status !== "active") {
+          return;
+        }
+
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["sessions", sessionIndex, "status"],
+          message: "Sessions cannot be active while the event is still a draft.",
+        });
       });
     }
   });

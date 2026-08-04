@@ -44,6 +44,7 @@ import {
   EVENT_STATUSES,
   type EventCategory,
 } from "../constants";
+import { EventBasicsPreviewCard } from "../components/event-basics-preview-card";
 import type { CreateEventFormValues } from "../types";
 import { slugify } from "../utils/slugify";
 
@@ -106,6 +107,11 @@ export function EventBasicsStep() {
   const form = useFormContext<CreateEventFormValues>();
   const { control, getValues, setValue, trigger } = form;
   const title = useWatch({ control, name: "title" });
+  const category = useWatch({ control, name: "category" });
+  const status = useWatch({ control, name: "status" });
+  const preDescription = useWatch({ control, name: "preDescription" });
+  const imageLinks = useWatch({ control, name: "images.imageLinks" });
+  const firstImageUrl = imageLinks?.[0]?.trim() ?? "";
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(
     () => getValues("slug").trim().length > 0
   );
@@ -214,14 +220,15 @@ export function EventBasicsStep() {
   return (
     <>
       <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Event Basics</CardTitle>
-            <CardDescription>
-              Configure the event title, category, status, and URL-friendly slug.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Event Basics</CardTitle>
+              <CardDescription>
+                Configure the event title, category, status, and URL-friendly
+                slug.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
               <FormField
                 control={control}
@@ -347,10 +354,10 @@ export function EventBasicsStep() {
                 )}
               />
             </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        <Card>
+          <Card>
           <CardHeader>
             <CardTitle>Descriptions</CardTitle>
             <CardDescription>
@@ -419,9 +426,9 @@ export function EventBasicsStep() {
               )}
             />
           </CardContent>
-        </Card>
+          </Card>
 
-        <Card>
+          <Card>
           <CardHeader>
             <CardTitle>Images</CardTitle>
             <CardDescription>
@@ -434,7 +441,8 @@ export function EventBasicsStep() {
               <div>
                 <h3 className="text-sm font-medium">Event Images</h3>
                 <p className="text-sm text-muted-foreground">
-                  Add one or more HTTP or HTTPS image URLs.
+                  Add one or more HTTP or HTTPS image URLs. The first image will
+                  be used as the event card preview.
                 </p>
               </div>
 
@@ -505,7 +513,24 @@ export function EventBasicsStep() {
               )}
             />
           </CardContent>
-        </Card>
+          </Card>
+
+        <section className="space-y-3">
+          <div>
+            <h2 className="text-lg font-semibold">Live Preview</h2>
+            <p className="text-sm text-muted-foreground">
+              Preview how the first event image and basic event details will
+              appear on the event card.
+            </p>
+          </div>
+          <EventBasicsPreviewCard
+            title={title ?? ""}
+            category={category ?? EVENT_CATEGORIES[0]}
+            status={status ?? EVENT_STATUSES[0]}
+            preDescription={preDescription ?? ""}
+            firstImageUrl={firstImageUrl}
+          />
+        </section>
       </div>
 
       <AlertDialog
