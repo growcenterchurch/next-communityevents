@@ -53,12 +53,31 @@ interface User {
 }
 import { Input } from "@/components/ui/input";
 
+type EventFilter = "all" | "ghop" | "pre-service" | "others";
+
+const eventFilterOptions: { label: string; value: EventFilter }[] = [
+  { label: "All", value: "all" },
+  { label: "GHOP", value: "ghop" },
+  { label: "Pre Service", value: "pre-service" },
+  { label: "Others", value: "others" },
+];
+
+const getEventNameFlags = (event: any) => {
+  const eventName = String(event?.title ?? "").toLowerCase();
+
+  return {
+    isGhop: eventName.includes("ghop"),
+    isPreService: /pre[\s-]*service/.test(eventName),
+  };
+};
+
 function EventsAdmin() {
   const [events, setEvents] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [eventFilter, setEventFilter] = useState<EventFilter>("all");
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false); // Add loading state
   const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
@@ -247,6 +266,24 @@ function EventsAdmin() {
     setIsDialogOpen(false);
     setSelectedEvent(null);
   };
+
+  const filteredEvents = events.filter((event) => {
+    if (eventFilter === "all") {
+      return true;
+    }
+
+    const { isGhop, isPreService } = getEventNameFlags(event);
+
+    if (eventFilter === "ghop") {
+      return isGhop;
+    }
+
+    if (eventFilter === "pre-service") {
+      return isPreService;
+    }
+
+    return !isGhop && !isPreService;
+  });
 
   const mainSpacing = isSmallScreen ? "space-y-6" : "space-y-8";
 
@@ -469,9 +506,33 @@ function EventsAdmin() {
                 Track event status, topics, and registration windows.
               </CardDescription>
             </div>
-            <Badge variant="secondary" className="bg-sky-100 text-sky-700">
-              {events.length} total
-            </Badge>
+            <div className="flex flex-col gap-3 sm:items-end">
+              <Badge variant="secondary" className="w-fit bg-sky-100 text-sky-700">
+                {filteredEvents.length} of {events.length} total
+              </Badge>
+              <div className="flex flex-wrap gap-2">
+                {eventFilterOptions.map((option) => {
+                  const isActive = eventFilter === option.value;
+
+                  return (
+                    <Button
+                      key={option.value}
+                      type="button"
+                      variant={isActive ? "default" : "outline"}
+                      size="sm"
+                      className={
+                        isActive
+                          ? "rounded-full bg-sky-600 text-white hover:bg-sky-500"
+                          : "rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                      }
+                      onClick={() => setEventFilter(option.value)}
+                    >
+                      {option.label}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="overflow-hidden rounded-xl border border-slate-200">
             {isLoading ? (
@@ -496,7 +557,7 @@ function EventsAdmin() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {events.map((event) => (
+                    {filteredEvents.map((event) => (
                       <TableRow
                         key={event.code}
                         className="border-slate-100 hover:bg-slate-50"
@@ -533,6 +594,11 @@ function EventsAdmin() {
                     ))}
                   </TableBody>
                 </Table>
+                {filteredEvents.length === 0 && (
+                  <p className="py-8 text-center text-sm text-slate-500">
+                    No events match this filter.
+                  </p>
+                )}
               </div>
             )}
           </CardContent>

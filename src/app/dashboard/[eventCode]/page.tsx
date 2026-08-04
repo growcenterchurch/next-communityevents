@@ -81,7 +81,101 @@ interface Pagination {
   totalData: number;
 }
 
-type EventReportDownload = "csv" | "xlsx" | null;
+type EventReportFormat = "csv" | "xlsx";
+type EventReportDownload = `${string}:${EventReportFormat}` | null;
+
+const SORT_SESSIONS_BY_TITLE_DATE = true;
+const TITLE_DATE_SORT_EVENT_CODES = new Set(["5f75ed1", "0b855b5", "c011b1d"]);
+const SESSIONS_TABLE_PAGE_SIZE = 5;
+
+const monthNames: Record<string, number> = {
+  jan: 0,
+  january: 0,
+  feb: 1,
+  february: 1,
+  mar: 2,
+  march: 2,
+  apr: 3,
+  april: 3,
+  may: 4,
+  jun: 5,
+  june: 5,
+  jul: 6,
+  july: 6,
+  aug: 7,
+  august: 7,
+  sep: 8,
+  sept: 8,
+  september: 8,
+  oct: 9,
+  october: 9,
+  nov: 10,
+  november: 10,
+  dec: 11,
+  december: 11,
+};
+
+const getSessionTitleDateTime = (title: string) => {
+  const isoDateMatch = title.match(/\b(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})\b/);
+  if (isoDateMatch) {
+    const [, year, month, day] = isoDateMatch;
+    return new Date(Number(year), Number(month) - 1, Number(day)).getTime();
+  }
+
+  const dayMonthMatch = title.match(
+    /\b(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+)\s+(\d{4})\b/i,
+  );
+  if (dayMonthMatch) {
+    const [, day, monthName, year] = dayMonthMatch;
+    const month = monthNames[monthName.toLowerCase()];
+
+    if (month !== undefined) {
+      return new Date(Number(year), month, Number(day)).getTime();
+    }
+  }
+
+  const monthDayMatch = title.match(
+    /\b([a-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})\b/i,
+  );
+  if (monthDayMatch) {
+    const [, monthName, day, year] = monthDayMatch;
+    const month = monthNames[monthName.toLowerCase()];
+
+    if (month !== undefined) {
+      return new Date(Number(year), month, Number(day)).getTime();
+    }
+  }
+
+  return null;
+};
+
+const getSessionsForTable = (sessions: EventSession[], eventCode: string) => {
+  if (
+    !SORT_SESSIONS_BY_TITLE_DATE ||
+    !TITLE_DATE_SORT_EVENT_CODES.has(eventCode)
+  ) {
+    return sessions;
+  }
+
+  return [...sessions].sort((currentSession, nextSession) => {
+    const currentDate = getSessionTitleDateTime(currentSession.title);
+    const nextDate = getSessionTitleDateTime(nextSession.title);
+
+    if (currentDate === null && nextDate === null) {
+      return 0;
+    }
+
+    if (currentDate === null) {
+      return 1;
+    }
+
+    if (nextDate === null) {
+      return -1;
+    }
+
+    return nextDate - currentDate;
+  });
+};
 
 function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
   const router = useRouter();
@@ -93,6 +187,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const { handleExpiredToken, getValidAccessToken } = useAuth();
   const [selectedSession, setSelectedSession] = useState<string | null>(null);
+  const [sessionsTablePage, setSessionsTablePage] = useState(1);
   const [reportDownload, setReportDownload] =
     useState<EventReportDownload>(null);
   const { toast } = useToast();
@@ -113,7 +208,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
-        }
+        },
       );
       if (response.status === 401) {
         router.push("/login/v2");
@@ -136,7 +231,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
   const fetchUsers = async (
     cursor: string | null = null,
     direction: string | null = null,
-    name: string | null = null
+    name: string | null = null,
   ) => {
     const accessToken = await getValidAccessToken();
     if (!accessToken) {
@@ -191,6 +286,10 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
       setSelectedSession(sessions[0].code);
     }
   }, [sessions, selectedSession]);
+
+  useEffect(() => {
+    setSessionsTablePage(1);
+  }, [params.eventCode, sessions.length]);
 
   const registerUser = async (user: User) => {
     if (!selectedSession) {
@@ -282,12 +381,13 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
   };
 
   const downloadEventReport = async (
-    format: Exclude<EventReportDownload, null>,
+    session: EventSession,
+    format: EventReportFormat,
   ) => {
-    if (!selectedSession) {
+    if (!session.code) {
       toast({
         title: "Error",
-        description: "Please select an instance before downloading a report.",
+        description: "This instance cannot be exported.",
         variant: "destructive",
       });
       return;
@@ -302,12 +402,12 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
     const searchParams = new URLSearchParams({
       format,
       eventCode: params.eventCode,
-      instanceCode: selectedSession,
+      instanceCode: session.code,
     });
 
-    const fallbackFilename = `${params.eventCode}-${selectedSession}-registrations.${format}`;
+    const fallbackFilename = `${params.eventCode}-${session.code}-registrations.${format}`;
 
-    setReportDownload(format);
+    setReportDownload(`${session.code}:${format}`);
     try {
       const response = await fetch(
         `${API_BASE_URL}/api/v2/internal/events/registers/download?${searchParams.toString()}`,
@@ -335,7 +435,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
 
       toast({
         title: "Report downloaded",
-        description: `${eventDetails?.title ?? params.eventCode} registrations ${format.toUpperCase()} export is ready.`,
+        description: `${session.title} registrations ${format.toUpperCase()} export is ready.`,
       });
     } catch (error) {
       console.error("Error downloading event report:", error);
@@ -353,7 +453,22 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
   };
 
   const selectedSessionDetails = sessions.find(
-    (session) => session.code === selectedSession
+    (session) => session.code === selectedSession,
+  );
+  const tableSessions = getSessionsForTable(sessions, params.eventCode);
+  const sessionsTableTotalPages = Math.max(
+    1,
+    Math.ceil(tableSessions.length / SESSIONS_TABLE_PAGE_SIZE),
+  );
+  const normalizedSessionsTablePage = Math.min(
+    sessionsTablePage,
+    sessionsTableTotalPages,
+  );
+  const sessionsTableStartIndex =
+    (normalizedSessionsTablePage - 1) * SESSIONS_TABLE_PAGE_SIZE;
+  const paginatedTableSessions = tableSessions.slice(
+    sessionsTableStartIndex,
+    sessionsTableStartIndex + SESSIONS_TABLE_PAGE_SIZE,
   );
 
   return (
@@ -392,6 +507,16 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
             )}
             <h2 className="text-xl font-bold my-4">Sessions</h2>
             <Table>
+              {tableSessions.length > 0 && (
+                <TableCaption>
+                  Showing {sessionsTableStartIndex + 1}-
+                  {Math.min(
+                    sessionsTableStartIndex + SESSIONS_TABLE_PAGE_SIZE,
+                    tableSessions.length,
+                  )}{" "}
+                  of {tableSessions.length} sessions
+                </TableCaption>
+              )}
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
@@ -412,11 +537,12 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
                   <TableHead className="hidden sm:table-cell">
                     QR Code
                   </TableHead>
+                  <TableHead>Export</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sessions.length > 0 ? (
-                  sessions.map((session) => (
+                {paginatedTableSessions.length > 0 ? (
+                  paginatedTableSessions.map((session) => (
                     <TableRow key={session.code}>
                       <TableCell>{session.title}</TableCell>
                       <TableCell>
@@ -444,7 +570,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
                         <Button
                           onClick={() => {
                             router.push(
-                              `/qrscan/${params.eventCode}/${session.code}`
+                              `/qrscan/${params.eventCode}/${session.code}`,
                             );
                           }}
                         >
@@ -459,29 +585,97 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
                           filename={`QR-${eventDetails?.title} ${session.title}`}
                         />
                       </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col gap-2 sm:flex-row">
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={() => downloadEventReport(session, "csv")}
+                            disabled={reportDownload !== null}
+                          >
+                            {reportDownload === `${session.code}:csv` ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Download className="h-4 w-4" />
+                            )}
+                            CSV
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => downloadEventReport(session, "xlsx")}
+                            disabled={reportDownload !== null}
+                          >
+                            {reportDownload === `${session.code}:xlsx` ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Download className="h-4 w-4" />
+                            )}
+                            Excel
+                          </Button>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center">
+                    <TableCell colSpan={9} className="text-center">
                       No sessions available.
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
+            {tableSessions.length > SESSIONS_TABLE_PAGE_SIZE && (
+              <div className="mt-4 flex justify-center">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() =>
+                          setSessionsTablePage((page) => Math.max(1, page - 1))
+                        }
+                        className={cn(
+                          normalizedSessionsTablePage === 1 &&
+                            "pointer-events-none opacity-50",
+                        )}
+                      />
+                    </PaginationItem>
+                    <PaginationItem className="flex items-center px-3 text-sm text-muted-foreground">
+                      Page {normalizedSessionsTablePage} of{" "}
+                      {sessionsTableTotalPages}
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() =>
+                          setSessionsTablePage((page) =>
+                            Math.min(sessionsTableTotalPages, page + 1),
+                          )
+                        }
+                        className={cn(
+                          normalizedSessionsTablePage ===
+                            sessionsTableTotalPages &&
+                            "pointer-events-none opacity-50",
+                        )}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
           </>
         )}
       </div>
-      <section className="container mx-auto space-y-4 px-4 pb-10">
-        <div className="space-y-1 text-center">
+      <section className="container mx-auto space-y-4 px-4 py-10">
+        {/* <div className="space-y-1 text-center">
           <h2 className="text-xl font-bold">Manual Registration</h2>
           <p className="text-sm text-muted-foreground">
             Select an instance and register attendees without scanning.
           </p>
-        </div>
+        </div> */}
 
-        <Card>
+        {/* <Card>
           <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle>Choose an instance</CardTitle>
@@ -496,45 +690,6 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
             )}
           </CardHeader>
           <CardContent>
-            <div className="mb-6 space-y-3 rounded-lg border bg-muted/20 p-4">
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h3 className="text-base font-semibold">Event reports</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Download registrations for the selected instance.
-                  </p>
-                </div>
-                <div className="grid w-full gap-2 sm:w-auto sm:grid-cols-2">
-                  <Button
-                    type="button"
-                    onClick={() => downloadEventReport("csv")}
-                    disabled={reportDownload !== null}
-                    className="w-full sm:w-auto"
-                  >
-                    {reportDownload === "csv" ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Download className="h-4 w-4" />
-                    )}
-                    Export CSV
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => downloadEventReport("xlsx")}
-                    disabled={reportDownload !== null}
-                    className="w-full sm:w-auto"
-                  >
-                    {reportDownload === "xlsx" ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Download className="h-4 w-4" />
-                    )}
-                    Export XLSX
-                  </Button>
-                </div>
-              </div>
-            </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {sessions.map((session) => (
                 <button
@@ -583,7 +738,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
               </p>
             )}
           </CardContent>
-        </Card>
+        </Card> */}
 
         <Card>
           <CardHeader>
@@ -688,7 +843,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
                             fetchUsers(
                               pagination.previous,
                               "prev",
-                              searchQuery
+                              searchQuery,
                             );
                           } else {
                             fetchUsers(pagination.previous, "prev");
