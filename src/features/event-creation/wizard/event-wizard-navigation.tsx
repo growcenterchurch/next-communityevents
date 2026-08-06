@@ -6,6 +6,7 @@ type EventWizardNavigationProps = {
   isProcessing?: boolean;
   onBack: () => void;
   onNext: () => void;
+  onSubmit: () => void;
 };
 
 export function EventWizardNavigation({
@@ -14,6 +15,7 @@ export function EventWizardNavigation({
   isProcessing = false,
   onBack,
   onNext,
+  onSubmit,
 }: EventWizardNavigationProps) {
   return (
     <div className="flex flex-col-reverse gap-3 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
@@ -26,8 +28,17 @@ export function EventWizardNavigation({
       >
         Back
       </Button>
-      <Button type="button" disabled={isProcessing} onClick={onNext}>
-        {isLastStep ? "Submit Event" : "Next"}
+      <Button
+        type="button"
+        disabled={isProcessing}
+        onClick={isLastStep ? onSubmit : onNext}
+        aria-busy={isLastStep && isProcessing}
+      >
+        {isLastStep
+          ? isProcessing
+            ? "Creating Event..."
+            : "Create Event"
+          : "Next"}
       </Button>
     </div>
   );

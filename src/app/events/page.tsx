@@ -21,6 +21,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import withAuth from "@/components/providers/AuthWrapper";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { formatDate, hasType } from "@/lib/utils";
+import { isPreServiceEventCode } from "@/lib/preservice-events";
 
 const EventsPage = () => {
   const [events, setEvents] = useState<any[]>([]); // State to hold fetched events
@@ -79,6 +80,10 @@ const EventsPage = () => {
   }, [getValidAccessToken, handleExpiredToken]);
 
   function handleSession(code: string) {
+    if (isPreServiceEventCode(code)) {
+      return router.push(`/events/preservice/${code}`);
+    }
+
     return router.push(`/events/${code}`);
   }
 

@@ -83,6 +83,14 @@ export type NotificationChannel = (typeof NOTIFICATION_CHANNELS)[number];
 
 export const DEFAULT_EVENT_TIMEZONE = "Asia/Jakarta";
 
+export const EVENT_TIMEZONES = [DEFAULT_EVENT_TIMEZONE] as const;
+
+export type EventTimezone = (typeof EVENT_TIMEZONES)[number];
+
+export const REMINDER_INTERVALS = ["24h", "1h"] as const;
+
+export type ReminderInterval = (typeof REMINDER_INTERVALS)[number];
+
 export const DEFAULT_EVENT_CTA = {
   text: "Register Here!",
   link: "NORMAL_FLOW",
