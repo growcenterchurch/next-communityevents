@@ -23,6 +23,12 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import { formatDate, hasType } from "@/lib/utils";
 import { isPreServiceEventCode } from "@/lib/preservice-events";
 
+const PRE_SERVICE_ORDER: Record<string, number> = {
+  "Pre Service (Jakarta)": 1,
+  "Pre Service (Manado)": 2,
+  "Pre Service Generation (Youth & College)": 3,
+};
+
 const EventsPage = () => {
   const [events, setEvents] = useState<any[]>([]); // State to hold fetched events
   const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
@@ -110,6 +116,11 @@ const EventsPage = () => {
           ) : events && events.length > 0 ? (
             events
               .filter((event) => event.availabilityStatus !== "unavailable")
+              .sort(
+                (a, b) =>
+                  (PRE_SERVICE_ORDER[a.title] ?? Number.MAX_SAFE_INTEGER) -
+                  (PRE_SERVICE_ORDER[b.title] ?? Number.MAX_SAFE_INTEGER),
+              )
               .map((event) => (
                 <Card key={event.code} className="rounded-xl mb-4">
                   <div className="flex flex-col md:flex-row">
