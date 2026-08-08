@@ -339,14 +339,14 @@ const EventSessions = () => {
                                         {currentIrOption.registrationStartTime}{" "}
                                         - {currentIrOption.registrationEndTime}
                                       </span>
-                                      {currentIrDebug ? (
+                                      {/* {currentIrDebug ? (
                                         <span className="text-sm text-blue-700">
                                           Debug: current{" "}
                                           {currentIrDebug.currentTime} compared
                                           to end{" "}
                                           {currentIrDebug.registrationEndTime}
                                         </span>
-                                      ) : null}
+                                      ) : null} */}
                                       {isCurrentIrOptionClosed ? (
                                         <span className="text-base font-semibold text-red-600">
                                           Registration closed
