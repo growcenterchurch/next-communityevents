@@ -100,6 +100,8 @@ function getPreServiceOptionRegistrationDebug(
   };
 }
 
+const SHOW_PRE_SERVICE_IR_DEBUG = false;
+
 const EventSessions = () => {
   const { eventCode } = useParams(); // Retrieve eventCode from the route params
   const normalizedEventCode = Array.isArray(eventCode)
@@ -339,14 +341,15 @@ const EventSessions = () => {
                                         {currentIrOption.registrationStartTime}{" "}
                                         - {currentIrOption.registrationEndTime}
                                       </span>
-                                      {/* {currentIrDebug ? (
+                                      {SHOW_PRE_SERVICE_IR_DEBUG &&
+                                      currentIrDebug ? (
                                         <span className="text-sm text-blue-700">
                                           Debug: current{" "}
                                           {currentIrDebug.currentTime} compared
                                           to end{" "}
                                           {currentIrDebug.registrationEndTime}
                                         </span>
-                                      ) : null} */}
+                                      ) : null}
                                       {isCurrentIrOptionClosed ? (
                                         <span className="text-base font-semibold text-red-600">
                                           Registration closed
@@ -404,12 +407,14 @@ const EventSessions = () => {
                                               {option.registrationStartTime} -{" "}
                                               {option.registrationEndTime}
                                             </span>
-                                            <span className="text-sm text-blue-700">
-                                              Debug: current{" "}
-                                              {optionDebug.currentTime} compared
-                                              to end{" "}
-                                              {optionDebug.registrationEndTime}
-                                            </span>
+                                            {SHOW_PRE_SERVICE_IR_DEBUG ? (
+                                              <span className="text-sm text-blue-700">
+                                                Debug: current{" "}
+                                                {optionDebug.currentTime}{" "}
+                                                compared to end{" "}
+                                                {optionDebug.registrationEndTime}
+                                              </span>
+                                            ) : null}
                                             {isOptionClosed ? (
                                               <span className="text-base font-semibold text-red-600">
                                                 Registration closed
