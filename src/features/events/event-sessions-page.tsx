@@ -58,6 +58,10 @@ interface EventDetails {
 }
 
 function getPreServiceTimeZone(option: PreServiceIrOption) {
+  if (option.time.includes("WITA")) {
+    return "Asia/Makassar";
+  }
+
   return option.time.includes("WIT") ? "Asia/Jayapura" : "Asia/Jakarta";
 }
 

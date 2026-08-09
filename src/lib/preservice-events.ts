@@ -102,7 +102,7 @@ export const PRE_SERVICE_EVENTS: Record<string, PreServiceEventConfig> = {
     irOptions: [
       {
         number: "GC MANADO",
-        time: "Pk. 15:00 WIT",
+        time: "Pk. 15:00 WITA",
         location: "Star Square Mall",
         team: "Tim IR 16:00",
         eventStartTime: "15:00",
@@ -112,7 +112,7 @@ export const PRE_SERVICE_EVENTS: Record<string, PreServiceEventConfig> = {
       },
       {
         number: "GC MINUT",
-        time: "Pk. 08:00 WIT",
+        time: "Pk. 08:00 WITA",
         location: "The Sentra Hotel",
         team: "Tim IR 09:00",
         eventStartTime: "08:00",
