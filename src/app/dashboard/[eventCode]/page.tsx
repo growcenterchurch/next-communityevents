@@ -85,7 +85,14 @@ type EventReportFormat = "csv" | "xlsx";
 type EventReportDownload = `${string}:${EventReportFormat}` | null;
 
 const SORT_SESSIONS_BY_TITLE_DATE = true;
-const TITLE_DATE_SORT_EVENT_CODES = new Set(["5f75ed1", "0b855b5", "c011b1d"]);
+const TITLE_DATE_SORT_EVENT_CODES = new Set([
+  "5f75ed1",
+  "0b855b5",
+  "c011b1d",
+  "b08c409",
+  "9c1e990",
+  "d68cfe1",
+]);
 const SESSIONS_TABLE_PAGE_SIZE = 5;
 
 const monthNames: Record<string, number> = {
@@ -98,12 +105,15 @@ const monthNames: Record<string, number> = {
   apr: 3,
   april: 3,
   may: 4,
+  mei: 4,
   jun: 5,
   june: 5,
   jul: 6,
   july: 6,
   aug: 7,
   august: 7,
+  agustus: 7,
+  agu: 7,
   sep: 8,
   sept: 8,
   september: 8,
