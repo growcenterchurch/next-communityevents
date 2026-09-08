@@ -30,6 +30,13 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import withAuth from "@/components/providers/AuthWrapper";
 import { useAuth } from "@/components/providers/AuthProvider";
 import HeaderNav from "@/components/HeaderNav";
@@ -760,6 +767,25 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-2 sm:max-w-sm">
+              <p className="text-sm font-medium">Event instance</p>
+              <Select
+                value={selectedSession ?? undefined}
+                onValueChange={setSelectedSession}
+                disabled={sessions.length === 0}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select an instance" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sessions.map((session) => (
+                    <SelectItem key={session.code} value={session.code}>
+                      {session.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="relative w-full sm:max-w-sm">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
